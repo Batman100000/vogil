@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOGIL - Government Data Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      direction: rtl;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    header p {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    button {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 600;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .results {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .dataset-item,
+    .org-item,
+    .tag-item {
+      padding: 15px;
+      margin-bottom: 10px;
+      background: #f5f5f5;
+      border-left: 4px solid #667eea;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .dataset-item:hover,
+    .org-item:hover,
+    .tag-item:hover {
+      background: #e8e8ff;
+      transform: translateX(5px);
+    }
+
+    .dataset-item h3,
+    .org-item h3,
+    .tag-item h3 {
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .dataset-item p,
+    .org-item p,
+    .tag-item p {
+      font-size: 0.9em;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    .dataset-item .meta {
+      font-size: 0.8em;
+      color: #999;
+      margin-top: 8px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    .tab-btn {
+      padding: 12px 20px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-size: 1em;
+      color: #666;
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat-card .number {
+      font-size: 2em;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .stat-card .label {
+      font-size: 0.9em;
+      opacity: 0.9;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #667eea;
+    }
+
+    .error {
+      background: #ffebee;
+      color: #c62828;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border-left: 4px solid #c62828;
+    }
+
+    .success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border-left: 4px solid #2e7d32;
+    }
+
+    @media (max-width: 1024px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    footer {
+      text-align: center;
+      color: white;
+      margin-top: 40px;
+      opacity: 0.8;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🇮🇱 VOGIL</h1>
+      <p>Israel Government Data Portal - Real-time Explorer</p>
+    </header>
+
+    <div class="main">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Search Datasets -->
+        <div class="card">
+          <h2>🔍 חיפוש ערכות נתונים</h2>
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="חיפוש...">
+            <button onclick="searchDatasets()">חיפוש</button>
+          </div>
+          <div id="searchResults" class="results"></div>
+        </div>
+
+        <!-- Browse Organizations -->
+        <div class="card">
+          <h2>🏢 ארגונים</h2>
+          <button onclick="loadOrganizations()" style="width: 100%; margin-bottom: 15px;">טען ארגונים</button>
+          <div id="organizationList" class="results"></div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="card">
+        <div class="tabs">
+          <button class="tab-btn active" onclick="switchTab('overview')">📊 סקירה</button>
+          <button class="tab-btn" onclick="switchTab('datasets')">📁 ערכות נתונים</button>
+          <button class="tab-btn" onclick="switchTab('tags')">🏷️ תגים</button>
+          <button class="tab-btn" onclick="switchTab('records')">📋 רשומות</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+          <div class="stats">
+            <div class="stat-card">
+              <div class="number" id="datasetCount">-</div>
+              <div class="label">ערכות נתונים</div>
+            </div>
+            <div class="stat-card">
+              <div class="number" id="orgCount">-</div>
+              <div class="label">ארגונים</div>
+            </div>
+            <div class="stat-card">
+              <div class="number" id="tagCount">-</div>
+              <div class="label">תגים</div>
+            </div>
+            <div class="stat-card">
+              <div class="number" id="resourceCount">-</div>
+              <div class="label">משאבים</div>
+            </div>
+          </div>
+          <button onclick="loadStatistics()" style="width: 100%;">רענן סטטיסטיקות</button>
+        </div>
+
+        <!-- Datasets Tab -->
+        <div id="datasets" class="tab-content">
+          <div class="search-box">
+            <input type="text" id="datasetOrgFilter" placeholder="סנן לפי ארגון...">
+            <button onclick="loadAllDatasets()">טען</button>
+          </div>
+          <div id="datasetsList" class="results"></div>
+        </div>
+
+        <!-- Tags Tab -->
+        <div id="tags" class="tab-content">
+          <button onclick="loadTags()" style="width: 100%; margin-bottom: 15px;">טען כל התגים</button>
+          <div id="tagsList" class="results"></div>
+        </div>
+
+        <!-- Records Tab -->
+        <div id="records" class="tab-content">
+          <div class="search-box">
+            <input type="text" id="resourceId" placeholder="ID משאב...">
+            <input type="text" id="recordQuery" placeholder="חיפוש...">
+            <button onclick="searchRecords()">חיפוש</button>
+          </div>
+          <div id="recordsList" class="results"></div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>VOGIL - Government Transparency Dashboard | Powered by data-gov-il-mcp</p>
+    </footer>
+  </div>
+
+  <script>
+    const API_BASE = '/api';
+
+    async function apiCall(endpoint, params = {}) {
+      try {
+        const query = new URLSearchParams(params).toString();
+        const url = `${API_BASE}${endpoint}${query ? '?' + query : ''}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`API error: ${response.status}`);
+        return await response.json();
+      } catch (error) {
+        showError(error.message);
+        return null;
+      }
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    async function searchDatasets() {
+      const query = document.getElementById('searchInput').value;
+      if (!query) return showError('נא הזן חיפוש');
+
+      const results = document.getElementById('searchResults');
+      results.innerHTML = '<div class="loading">חיפוש...</div>';
+
+      const data = await apiCall('/search', { query });
+      if (data) {
+        results.innerHTML = formatResults(data, 'dataset');
+      }
+    }
+
+    async function loadOrganizations() {
+      const results = document.getElementById('organizationList');
+      results.innerHTML = '<div class="loading">טוען...</div>';
+
+      const data = await apiCall('/organizations');
+      if (data) {
+        results.innerHTML = formatResults(data, 'org');
+      }
+    }
+
+    async function loadDatasets() {
+      const org = document.getElementById('datasetOrgFilter').value;
+      const results = document.getElementById('datasetsList');
+      results.innerHTML = '<div class="loading">טוען...</div>';
+
+      const data = await apiCall('/datasets', { org });
+      if (data) {
+        results.innerHTML = formatResults(data, 'dataset');
+      }
+    }
+
+    async function loadAllDatasets() {
+      await loadDatasets();
+    }
+
+    async function loadTags() {
+      const results = document.getElementById('tagsList');
+      results.innerHTML = '<div class="loading">טוען...</div>';
+
+      const data = await apiCall('/tags');
+      if (data) {
+        results.innerHTML = formatResults(data, 'tag');
+      }
+    }
+
+    async function searchRecords() {
+      const resourceId = document.getElementById('resourceId').value;
+      const query = document.getElementById('recordQuery').value;
+
+      if (!resourceId) return showError('נא הזן ID משאב');
+
+      const results = document.getElementById('recordsList');
+      results.innerHTML = '<div class="loading">חיפוש...</div>';
+
+      const data = await apiCall('/records', { resourceId, query, limit: 50 });
+      if (data) {
+        results.innerHTML = formatResults(data, 'record');
+      }
+    }
+
+    async function loadStatistics() {
+      // Load all data for stats
+      const [datasets, orgs, tags] = await Promise.all([
+        apiCall('/datasets'),
+        apiCall('/organizations'),
+        apiCall('/tags')
+      ]);
+
+      document.getElementById('datasetCount').textContent = '?';
+      document.getElementById('orgCount').textContent = orgs ? '?' : '-';
+      document.getElementById('tagCount').textContent = tags ? '?' : '-';
+      document.getElementById('resourceCount').textContent = '?';
+
+      showSuccess('סטטיסטיקות עודכנו');
+    }
+
+    function formatResults(data, type) {
+      if (!data || !data.content) return '<p>לא נמצאו תוצאות</p>';
+
+      const content = data.content[0]?.text || JSON.stringify(data);
+
+      if (type === 'record') {
+        return `<pre style="background: #f5f5f5; padding: 15px; border-radius: 8px; overflow-x: auto;">${escapeHtml(content)}</pre>`;
+      }
+
+      return `<div class="${type}-item">
+        <p>${escapeHtml(content.substring(0, 500))}</p>
+        ${content.length > 500 ? '<p><em>... (קטוע)</em></p>' : ''}
+      </div>`;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function showError(message) {
+      console.error(message);
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'error';
+      errorDiv.textContent = `❌ שגיאה: ${message}`;
+      document.querySelector('main')?.prepend(errorDiv);
+      setTimeout(() => errorDiv.remove(), 5000);
+    }
+
+    function showSuccess(message) {
+      const successDiv = document.createElement('div');
+      successDiv.className = 'success';
+      successDiv.textContent = `✅ ${message}`;
+      document.querySelector('header')?.after(successDiv);
+      setTimeout(() => successDiv.remove(), 3000);
+    }
+
+    // Load initial data
+    window.addEventListener('load', loadStatistics);
+  </script>
+</body>
+</html>
