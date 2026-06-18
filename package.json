@@ -1,0 +1,17 @@
+{
+  "name": "vogil",
+  "version": "0.1.0",
+  "description": "Israel Government Data Portal Integration",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "NODE_ENV=development node index.js"
+  },
+  "keywords": ["data-gov-il", "israel", "government-data"],
+  "author": "cypel",
+  "license": "MIT",
+  "dependencies": {
+    "data-gov-il-mcp": "latest"
+  }
+}
