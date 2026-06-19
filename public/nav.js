@@ -56,8 +56,11 @@ function initNavigation() {
 
   // Handle city selector
   const savedCity = localStorage.getItem('vogil-selected-city');
+  const headerCitySelector = document.getElementById('headerCitySelector');
+  const refreshBtn = document.getElementById('refreshDataBtn');
+
   const citySelectors = [
-    document.getElementById('headerCitySelector'),
+    headerCitySelector,
     document.getElementById('citySelector')
   ];
 
@@ -65,9 +68,19 @@ function initNavigation() {
     if (selector) {
       if (savedCity) {
         selector.value = savedCity;
+        // Show refresh button if city is already selected
+        if (refreshBtn && headerCitySelector === selector) {
+          refreshBtn.style.display = 'block';
+        }
       }
       selector.addEventListener('change', (e) => {
         localStorage.setItem('vogil-selected-city', e.target.value);
+
+        // Show/hide refresh button based on city selection
+        if (refreshBtn && selector === headerCitySelector) {
+          refreshBtn.style.display = e.target.value ? 'block' : 'none';
+        }
+
         window.dispatchEvent(new CustomEvent('cityChanged', { detail: { city: e.target.value } }));
       });
     }

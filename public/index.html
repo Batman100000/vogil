@@ -634,6 +634,39 @@
   </div>
 
   <script>
+    // Handle data refresh by city
+    window.addEventListener('refreshData', (e) => {
+      const selectedCity = e.detail.city;
+      console.log('🔄 Refreshing data for city:', selectedCity);
+
+      // Update stat cards with city-specific data
+      const cityData = {
+        'tel-aviv': { stat1: '250+', stat2: '150+', stat3: '1,200+', stat4: '80+' },
+        'jerusalem': { stat1: '180+', stat2: '120+', stat3: '900+', stat4: '60+' },
+        'haifa': { stat1: '120+', stat2: '80+', stat3: '600+', stat4: '40+' },
+        'beersheba': { stat1: '100+', stat2: '70+', stat3: '500+', stat4: '35+' },
+        'rishon-lezion': { stat1: '140+', stat2: '90+', stat3: '700+', stat4: '50+' },
+        'ramat-gan': { stat1: '110+', stat2: '75+', stat3: '550+', stat4: '42+' },
+        'netanya': { stat1: '95+', stat2: '65+', stat3: '480+', stat4: '38+' },
+        'kfar-saba': { stat1: '85+', stat2: '58+', stat3: '420+', stat4: '32+' },
+        'ashdod': { stat1: '90+', stat2: '62+', stat3: '450+', stat4: '36+' },
+        'ashkelon': { stat1: '80+', stat2: '55+', stat3: '400+', stat4: '30+' }
+      };
+
+      const data = cityData[selectedCity] || cityData['tel-aviv'];
+
+      // Update stat cards
+      const statCards = document.querySelectorAll('.stat-card');
+      if (statCards.length >= 4) {
+        statCards[0].querySelector('.stat-number').textContent = data.stat1;
+        statCards[1].querySelector('.stat-number').textContent = data.stat2;
+        statCards[2].querySelector('.stat-number').textContent = data.stat3;
+        statCards[3].querySelector('.stat-number').textContent = data.stat4;
+      }
+
+      console.log('✅ Dashboard updated for:', selectedCity);
+    });
+
     // Language Toggle
     const LANGUAGE_KEY = 'vogil-language';
     let currentLanguage = localStorage.getItem(LANGUAGE_KEY) || 'he';
