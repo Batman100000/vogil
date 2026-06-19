@@ -20,9 +20,40 @@
       direction: rtl;
     }
 
+    body.en {
+      direction: ltr;
+    }
+
     .container {
       max-width: 1600px;
       margin: 0 auto;
+    }
+
+    .language-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: white;
+      border: 2px solid #667eea;
+      border-radius: 50px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #667eea;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+    }
+
+    .language-toggle:hover {
+      background: #667eea;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .en .language-toggle {
+      right: auto;
+      left: 20px;
     }
 
     header {
@@ -140,6 +171,11 @@
       border-radius: 8px;
     }
 
+    .en .data-card {
+      border-right: none;
+      border-left: 4px solid #667eea;
+    }
+
     .data-card h3 {
       color: #667eea;
       font-size: 1.3em;
@@ -205,6 +241,10 @@
       border-bottom: 1px solid #eee;
     }
 
+    .en .data-table th, .en .data-table td {
+      text-align: left;
+    }
+
     .data-table tbody tr:hover {
       background: #f5f5f5;
     }
@@ -258,20 +298,34 @@
       .stats-grid {
         grid-template-columns: repeat(2, 1fr);
       }
+
+      .language-toggle {
+        top: 10px;
+        right: 10px;
+        font-size: 0.9em;
+        padding: 6px 12px;
+      }
+
+      .en .language-toggle {
+        right: auto;
+        left: 10px;
+      }
     }
   </style>
 </head>
 <body>
+  <button class="language-toggle" onclick="toggleLanguage()">🇬🇧 English</button>
+
   <div class="container">
     <header>
       <h1>🇮🇱 VOGIL</h1>
-      <p>Israel Government Data Portal - Real-time Explorer</p>
+      <p data-he="Israel Government Data Portal - Real-time Explorer" data-en="Israel Government Data Portal - Real-time Explorer">Israel Government Data Portal - Real-time Explorer</p>
       <div class="nav-buttons">
-        <a href="/analytics.html" class="nav-btn">📊 Analytics</a>
-        <a href="/people-tech.html" class="nav-btn">👥 People & Tech</a>
-        <a href="/insights-dashboard.html" class="nav-btn">🔍 Insights</a>
-        <a href="/graphs.html" class="nav-btn">📈 Graphs</a>
-        <a href="/air-quality.html" class="nav-btn">🌍 Air Quality</a>
+        <a href="/analytics.html" class="nav-btn" data-he="📊 Analytics" data-en="📊 Analytics">📊 Analytics</a>
+        <a href="/people-tech.html" class="nav-btn" data-he="👥 People & Tech" data-en="👥 People & Tech">👥 People & Tech</a>
+        <a href="/insights-dashboard.html" class="nav-btn" data-he="🔍 Insights" data-en="🔍 Insights">🔍 Insights</a>
+        <a href="/graphs.html" class="nav-btn" data-he="📈 Graphs" data-en="📈 Graphs">📈 Graphs</a>
+        <a href="/air-quality.html" class="nav-btn" data-he="🌍 Air Quality" data-en="🌍 Air Quality">🌍 Air Quality</a>
       </div>
     </header>
 
@@ -279,80 +333,80 @@
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-number">61</div>
-        <div class="stat-label">ארגונים</div>
-        <div class="stat-desc">מקורות נתונים משרדי</div>
+        <div class="stat-label" data-he="ארגונים" data-en="Organizations">ארגונים</div>
+        <div class="stat-desc" data-he="מקורות נתונים משרדי" data-en="Government Data Sources">מקורות נתונים משרדי</div>
       </div>
       <div class="stat-card highlight">
         <div class="stat-number">1,193</div>
-        <div class="stat-label">ערכות נתונים</div>
-        <div class="stat-desc">בתחומים שונים</div>
+        <div class="stat-label" data-he="ערכות נתונים" data-en="Datasets">ערכות נתונים</div>
+        <div class="stat-desc" data-he="בתחומים שונים" data-en="Across Various Domains">בתחומים שונים</div>
       </div>
       <div class="stat-card">
         <div class="stat-number">2,035</div>
-        <div class="stat-label">משאבים</div>
-        <div class="stat-desc">קבצי נתונים חי</div>
+        <div class="stat-label" data-he="משאבים" data-en="Resources">משאבים</div>
+        <div class="stat-desc" data-he="קבצי נתונים חי" data-en="Live Data Files">קבצי נתונים חי</div>
       </div>
       <div class="stat-card highlight">
         <div class="stat-number">121</div>
-        <div class="stat-label">תגים</div>
-        <div class="stat-desc">קטגוריות מוגדרות</div>
+        <div class="stat-label" data-he="תגים" data-en="Tags">תגים</div>
+        <div class="stat-desc" data-he="קטגוריות מוגדרות" data-en="Defined Categories">קטגוריות מוגדרות</div>
       </div>
     </div>
 
     <!-- TOP ORGANIZATIONS -->
     <div class="section">
-      <h2>🏢 הארגונים המובילים</h2>
+      <h2 data-he="🏢 הארגונים המובילים" data-en="🏢 Leading Organizations">🏢 הארגונים המובילים</h2>
       <table class="data-table">
         <thead>
           <tr>
-            <th>דרגה</th>
-            <th>שם ארגון</th>
-            <th>ערכות נתונים</th>
-            <th>תיאור</th>
+            <th data-he="דרגה" data-en="Rank">דרגה</th>
+            <th data-he="שם ארגון" data-en="Organization">שם ארגון</th>
+            <th data-he="ערכות נתונים" data-en="Datasets">ערכות נתונים</th>
+            <th data-he="תיאור" data-en="Description">תיאור</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>1️⃣</td>
-            <td><strong>משרד התחבורה</strong></td>
+            <td><strong data-he="משרד התחבורה" data-en="Ministry of Transportation">משרד התחבורה</strong></td>
             <td>185</td>
-            <td>נתוני תחבורה, דרכים, תנועה</td>
+            <td data-he="נתוני תחבורה, דרכים, תנועה" data-en="Transportation data, roads, traffic">נתוני תחבורה, דרכים, תנועה</td>
           </tr>
           <tr>
             <td>2️⃣</td>
-            <td><strong>רשות מיפוי ישראל</strong></td>
+            <td><strong data-he="רשות מיפוי ישראל" data-en="Survey of Israel">רשות מיפוי ישראל</strong></td>
             <td>116</td>
-            <td>נתוני גיאוגרפיה ומפות</td>
+            <td data-he="נתוני גיאוגרפיה ומפות" data-en="Geography and mapping data">נתוני גיאוגרפיה ומפות</td>
           </tr>
           <tr>
             <td>3️⃣</td>
-            <td><strong>משרד הסביבה</strong></td>
+            <td><strong data-he="משרד הסביבה" data-en="Ministry of Environment">משרד הסביבה</strong></td>
             <td>84</td>
-            <td>איכות אוויר, פחמן, ירוקות</td>
+            <td data-he="איכות אוויר, פחמן, ירוקות" data-en="Air quality, carbon, sustainability">איכות אוויר, פחמן, ירוקות</td>
           </tr>
           <tr>
             <td>4️⃣</td>
-            <td><strong>משרד המשפטים</strong></td>
+            <td><strong data-he="משרד המשפטים" data-en="Ministry of Justice">משרד המשפטים</strong></td>
             <td>82</td>
-            <td>נתוני משפט וחקיקה</td>
+            <td data-he="נתוני משפט וחקיקה" data-en="Legal and legislation data">נתוני משפט וחקיקה</td>
           </tr>
           <tr>
             <td>5️⃣</td>
-            <td><strong>משרד האוצר</strong></td>
+            <td><strong data-he="משרד האוצר" data-en="Ministry of Finance">משרד האוצר</strong></td>
             <td>60</td>
-            <td>תקציב, מס, כלכלה</td>
+            <td data-he="תקציב, מס, כלכלה" data-en="Budget, taxes, economy">תקציב, מס, כלכלה</td>
           </tr>
           <tr>
             <td>6️⃣</td>
-            <td><strong>משרד הבריאות</strong></td>
+            <td><strong data-he="משרד הבריאות" data-en="Ministry of Health">משרד הבריאות</strong></td>
             <td>56</td>
-            <td>בריאות ציבור, חיסונים</td>
+            <td data-he="בריאות ציבור, חיסונים" data-en="Public health, vaccinations">בריאות ציבור, חיסונים</td>
           </tr>
           <tr>
             <td>7️⃣</td>
-            <td><strong>רשות המים</strong></td>
+            <td><strong data-he="רשות המים" data-en="Water Authority">רשות המים</strong></td>
             <td>49</td>
-            <td>נתוני מים וביוב</td>
+            <td data-he="נתוני מים וביוב" data-en="Water and sewage data">נתוני מים וביוב</td>
           </tr>
         </tbody>
       </table>
@@ -360,47 +414,47 @@
 
     <!-- MAIN CONTENT SECTIONS -->
     <div class="section">
-      <h2>📊 סקירת הנתונים</h2>
+      <h2 data-he="📊 סקירת הנתונים" data-en="📊 Data Overview">📊 סקירת הנתונים</h2>
 
       <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('overview')">סקירה כללית</button>
-        <button class="tab-btn" onclick="switchTab('insights')">תובנות עיקריות</button>
-        <button class="tab-btn" onclick="switchTab('distributions')">התפלגויות</button>
+        <button class="tab-btn active" onclick="switchTab('overview')" data-he="סקירה כללית" data-en="Overview">סקירה כללית</button>
+        <button class="tab-btn" onclick="switchTab('insights')" data-he="תובנות עיקריות" data-en="Key Insights">תובנות עיקריות</button>
+        <button class="tab-btn" onclick="switchTab('distributions')" data-he="התפלגויות" data-en="Distributions">התפלגויות</button>
       </div>
 
       <!-- TAB 1: OVERVIEW -->
       <div id="overview" class="tab-content active">
         <div class="grid-2">
           <div class="data-card">
-            <h3>📁 סוגי הנתונים הנפוצים</h3>
-            <p>✅ <strong>תחבורה:</strong> נתוני תנועה, דרכים, נתונים בזמן אמת</p>
-            <p>✅ <strong>סביבה:</strong> איכות אוויר, טמפרטורה, ירוקות</p>
-            <p>✅ <strong>חינוך:</strong> מוסדות, בחינות, התפתחות</p>
-            <p>✅ <strong>בריאות:</strong> מחלות, אפידמיולוגיה, שירותים</p>
+            <h3 data-he="📁 סוגי הנתונים הנפוצים" data-en="📁 Common Data Types">📁 סוגי הנתונים הנפוצים</h3>
+            <p>✅ <strong data-he="תחבורה:" data-en="Transportation:">תחבורה:</strong> <span data-he="נתוני תנועה, דרכים, נתונים בזמן אמת" data-en="Traffic data, roads, real-time data">נתוני תנועה, דרכים, נתונים בזמן אמת</span></p>
+            <p>✅ <strong data-he="סביבה:" data-en="Environment:">סביבה:</strong> <span data-he="איכות אוויר, טמפרטורה, ירוקות" data-en="Air quality, temperature, sustainability">איכות אוויר, טמפרטורה, ירוקות</span></p>
+            <p>✅ <strong data-he="חינוך:" data-en="Education:">חינוך:</strong> <span data-he="מוסדות, בחינות, התפתחות" data-en="Institutions, exams, development">מוסדות, בחינות, התפתחות</span></p>
+            <p>✅ <strong data-he="בריאות:" data-en="Health:">בריאות:</strong> <span data-he="מחלות, אפידמיולוגיה, שירותים" data-en="Diseases, epidemiology, services">מחלות, אפידמיולוגיה, שירותים</span></p>
           </div>
 
           <div class="data-card">
-            <h3>🔍 כיסוי גיאוגרפי</h3>
-            <p>📍 <strong>כל מחוזות ישראל:</strong> מרכז, צפון, דרום, ירושלים</p>
-            <p>📍 <strong>ערים מרכזיות:</strong> תל אביב, ירושלים, חיפה, באר שבע</p>
-            <p>📍 <strong>נתונים מקומיים:</strong> רשויות מקומיות, עיריות</p>
-            <p>📍 <strong>נתונים לאומיים:</strong> כלל הממשלה והחברה</p>
+            <h3 data-he="🔍 כיסוי גיאוגרפי" data-en="🔍 Geographic Coverage">🔍 כיסוי גיאוגרפי</h3>
+            <p>📍 <strong data-he="כל מחוזות ישראל:" data-en="All Israeli Districts:">כל מחוזות ישראל:</strong> <span data-he="מרכז, צפון, דרום, ירושלים" data-en="Center, North, South, Jerusalem">מרכז, צפון, דרום, ירושלים</span></p>
+            <p>📍 <strong data-he="ערים מרכזיות:" data-en="Major Cities:">ערים מרכזיות:</strong> <span data-he="תל אביב, ירושלים, חיפה, באר שבע" data-en="Tel Aviv, Jerusalem, Haifa, Beersheba">תל אביב, ירושלים, חיפה, באר שבע</span></p>
+            <p>📍 <strong data-he="נתונים מקומיים:" data-en="Local Data:">נתונים מקומיים:</strong> <span data-he="רשויות מקומיות, עיריות" data-en="Municipalities, local authorities">רשויות מקומיות, עיריות</span></p>
+            <p>📍 <strong data-he="נתונים לאומיים:" data-en="National Data:">נתונים לאומיים:</strong> <span data-he="כלל הממשלה והחברה" data-en="All government and society">כלל הממשלה והחברה</span></p>
           </div>
 
           <div class="data-card">
-            <h3>⏰ טווח זמן הנתונים</h3>
-            <p>📅 <strong>נתונים עדכניים:</strong> מעודכנים יום שלישי וחמישי</p>
-            <p>📅 <strong>היסטוריה:</strong> עד 10 שנים לאחור בנושאים ממשלתיים</p>
-            <p>📅 <strong>תחזוקה:</strong> עדכונים סדירים מהמשרדים</p>
-            <p>📅 <strong>ארכיוני:</strong> כל הנתונים ההיסטוריים נשמרים</p>
+            <h3 data-he="⏰ טווח זמן הנתונים" data-en="⏰ Data Time Range">⏰ טווח זמן הנתונים</h3>
+            <p>📅 <strong data-he="נתונים עדכניים:" data-en="Current Data:">נתונים עדכניים:</strong> <span data-he="מעודכנים יום שלישי וחמישי" data-en="Updated Tuesday and Thursday">מעודכנים יום שלישי וחמישי</span></p>
+            <p>📅 <strong data-he="היסטוריה:" data-en="History:">היסטוריה:</strong> <span data-he="עד 10 שנים לאחור בנושאים ממשלתיים" data-en="Up to 10 years back for government topics">עד 10 שנים לאחור בנושאים ממשלתיים</span></p>
+            <p>📅 <strong data-he="תחזוקה:" data-en="Maintenance:">תחזוקה:</strong> <span data-he="עדכונים סדירים מהמשרדים" data-en="Regular updates from ministries">עדכונים סדירים מהמשרדים</span></p>
+            <p>📅 <strong data-he="ארכיוני:" data-en="Archives:">ארכיוני:</strong> <span data-he="כל הנתונים ההיסטוריים נשמרים" data-en="All historical data is preserved">כל הנתונים ההיסטוריים נשמרים</span></p>
           </div>
 
           <div class="data-card">
-            <h3>🎯 קטגוריות עיקריות</h3>
-            <p>🏛️ <strong>ממשלה:</strong> בעלות, הוצאות, תקציב</p>
-            <p>🏛️ <strong>חברה:</strong> דמוגרפיה, אקונומיה, עסקים</p>
-            <p>🏛️ <strong>טבע:</strong> אקלים, מינים, שמורות</p>
-            <p>🏛️ <strong>אנושי:</strong> כוח אדם, תעסוקה, חינוך</p>
+            <h3 data-he="🎯 קטגוריות עיקריות" data-en="🎯 Main Categories">🎯 קטגוריות עיקריות</h3>
+            <p>🏛️ <strong data-he="ממשלה:" data-en="Government:">ממשלה:</strong> <span data-he="בעלות, הוצאות, תקציב" data-en="Ownership, expenses, budget">בעלות, הוצאות, תקציב</span></p>
+            <p>🏛️ <strong data-he="חברה:" data-en="Society:">חברה:</strong> <span data-he="דמוגרפיה, אקונומיה, עסקים" data-en="Demographics, economy, business">דמוגרפיה, אקונומיה, עסקים</span></p>
+            <p>🏛️ <strong data-he="טבע:" data-en="Nature:">טבע:</strong> <span data-he="אקלים, מינים, שמורות" data-en="Climate, species, reserves">אקלים, מינים, שמורות</span></p>
+            <p>🏛️ <strong data-he="אנושי:" data-en="Human:">אנושי:</strong> <span data-he="כוח אדם, תעסוקה, חינוך" data-en="Personnel, employment, education">כוח אדם, תעסוקה, חינוך</span></p>
           </div>
         </div>
       </div>
@@ -409,28 +463,28 @@
       <div id="insights" class="tab-content">
         <div class="insights-list">
           <div class="insight-item">
-            <h4>📈 גדול מהממוצע</h4>
-            <p>משרד התחבורה ומיפוי ישראל מחזיקים בכ-25% מכל ערכות הנתונים של הממשלה</p>
+            <h4 data-he="📈 גדול מהממוצע" data-en="📈 Above Average">📈 גדול מהממוצע</h4>
+            <p data-he="משרד התחבורה ומיפוי ישראל מחזיקים בכ-25% מכל ערכות הנתונים של הממשלה" data-en="Ministry of Transportation and Survey of Israel hold about 25% of all government datasets">משרד התחבורה ומיפוי ישראל מחזיקים בכ-25% מכל ערכות הנתונים של הממשלה</p>
           </div>
           <div class="insight-item">
-            <h4>🌍 כיסוי ממצה</h4>
-            <p>הנתונים מכסים את כל אזורי ישראל עם דיוק עד לרמת הרשות המקומית</p>
+            <h4 data-he="🌍 כיסוי ממצה" data-en="🌍 Complete Coverage">🌍 כיסוי ממצה</h4>
+            <p data-he="הנתונים מכסים את כל אזורי ישראל עם דיוק עד לרמת הרשות המקומית" data-en="Data covers all areas of Israel with precision to the municipal level">הנתונים מכסים את כל אזורי ישראל עם דיוק עד לרמת הרשות המקומית</p>
           </div>
           <div class="insight-item">
-            <h4>⚡ עדכון קבוע</h4>
-            <p>עדכונים דו-שבועיים מבטיחים שהנתונים תמיד עדכניים ורלוונטיים</p>
+            <h4 data-he="⚡ עדכון קבוע" data-en="⚡ Regular Updates">⚡ עדכון קבוע</h4>
+            <p data-he="עדכונים דו-שבועיים מבטיחים שהנתונים תמיד עדכניים ורלוונטיים" data-en="Bi-weekly updates ensure data is always current and relevant">עדכונים דו-שבועיים מבטיחים שהנתונים תמיד עדכניים ורלוונטיים</p>
           </div>
           <div class="insight-item">
-            <h4>🔗 שילוב חוצה-תחומי</h4>
-            <p>היכולת לשלב נתונים מ-61 ארגונים שונים יוצרת הזדמנויות ניתוח חדשות</p>
+            <h4 data-he="🔗 שילוב חוצה-תחומי" data-en="🔗 Cross-Domain Integration">🔗 שילוב חוצה-תחומי</h4>
+            <p data-he="היכולת לשלב נתונים מ-61 ארגונים שונים יוצרת הזדמנויות ניתוח חדשות" data-en="Ability to combine data from 61 different organizations creates new analysis opportunities">היכולת לשלב נתונים מ-61 ארגונים שונים יוצרת הזדמנויות ניתוח חדשות</p>
           </div>
           <div class="insight-item">
-            <h4>💾 תאימות מלאה</h4>
-            <p>כל הנתונים ב-CSV, JSON, וXML - תאימים לכל כלי ניתוח</p>
+            <h4 data-he="💾 תאימות מלאה" data-en="💾 Full Compatibility">💾 תאימות מלאה</h4>
+            <p data-he="כל הנתונים ב-CSV, JSON, וXML - תאימים לכל כלי ניתוח" data-en="All data in CSV, JSON, and XML - compatible with any analysis tool">כל הנתונים ב-CSV, JSON, וXML - תאימים לכל כלי ניתוח</p>
           </div>
           <div class="insight-item">
-            <h4>🔐 גישה ציבורית</h4>
-            <p>כל הנתונים פתוחים ופומביים - ללא הגבלות גישה או רישוי</p>
+            <h4 data-he="🔐 גישה ציבורית" data-en="🔐 Public Access">🔐 גישה ציבורית</h4>
+            <p data-he="כל הנתונים פתוחים ופומביים - ללא הגבלות גישה או רישוי" data-en="All data is open and public - no access or licensing restrictions">כל הנתונים פתוחים ופומביים - ללא הגבלות גישה או רישוי</p>
           </div>
         </div>
       </div>
@@ -438,14 +492,14 @@
       <!-- TAB 3: DISTRIBUTIONS -->
       <div id="distributions" class="tab-content">
         <div style="margin-bottom: 30px;">
-          <h3 style="color: #667eea; margin-bottom: 20px;">📊 התפלגות ערכות נתונים לפי ארגון (Top 10)</h3>
+          <h3 style="color: #667eea; margin-bottom: 20px;" data-he="📊 התפלגות ערכות נתונים לפי ארגון (Top 10)" data-en="📊 Dataset Distribution by Organization (Top 10)">📊 התפלגות ערכות נתונים לפי ארגון (Top 10)</h3>
           <div class="chart-container">
             <canvas id="orgChart"></canvas>
           </div>
         </div>
 
         <div style="margin-bottom: 30px;">
-          <h3 style="color: #667eea; margin-bottom: 20px;">📁 סוגי משאבים הנתונים</h3>
+          <h3 style="color: #667eea; margin-bottom: 20px;" data-he="📁 סוגי משאבים הנתונים" data-en="📁 Types of Data Resources">📁 סוגי משאבים הנתונים</h3>
           <div class="chart-container">
             <canvas id="typeChart"></canvas>
           </div>
@@ -455,86 +509,121 @@
 
     <!-- FEATURED DATASETS -->
     <div class="section">
-      <h2>⭐ ערכות נתונים מומלצות</h2>
+      <h2 data-he="⭐ ערכות נתונים מומלצות" data-en="⭐ Featured Datasets">⭐ ערכות נתונים מומלצות</h2>
       <div class="grid-2">
         <div class="data-card">
-          <h3>🚗 נתוני תנועה בזמן אמת</h3>
-          <p><strong>ארגון:</strong> משרד התחבורה</p>
-          <p><strong>תיאור:</strong> נתונים על ازدحامים בכבישים, זמני נסיעה, אירועים</p>
-          <p><strong>עדכון:</strong> כל 5 דקות</p>
-          <p><strong>משאבים:</strong> 12 קבצי נתונים</p>
+          <h3>🚗 <span data-he="נתוני תנועה בזמן אמת" data-en="Real-time Traffic Data">נתוני תנועה בזמן אמת</span></h3>
+          <p><strong data-he="ארגון:" data-en="Organization:">ארגון:</strong> <span data-he="משרד התחבורה" data-en="Ministry of Transportation">משרד התחבורה</span></p>
+          <p><strong data-he="תיאור:" data-en="Description:">תיאור:</strong> <span data-he="נתונים על ازدحامים בכבישים, זמני נסיעה, אירועים" data-en="Data on traffic congestion, travel times, events">נתונים על ازدחامים בכבישים, זמני נסיעה, אירועים</span></p>
+          <p><strong data-he="עדכון:" data-en="Update:">עדכון:</strong> <span data-he="כל 5 דקות" data-en="Every 5 minutes">כל 5 דקות</span></p>
+          <p><strong data-he="משאבים:" data-en="Resources:">משאבים:</strong> <span data-he="12 קבצי נתונים" data-en="12 data files">12 קבצי נתונים</span></p>
         </div>
 
         <div class="data-card">
-          <h3>🌍 איכות אוויר בערים</h3>
-          <p><strong>ארגון:</strong> משרד הסביבה</p>
-          <p><strong>תיאור:</strong> PM2.5, PM10, NO₂ - מדידות יומיות בכל ערי ישראל</p>
-          <p><strong>עדכון:</strong> יומי</p>
-          <p><strong>משאבים:</strong> 8 קבצי נתונים</p>
+          <h3>🌍 <span data-he="איכות אוויר בערים" data-en="Air Quality in Cities">איכות אוויר בערים</span></h3>
+          <p><strong data-he="ארגון:" data-en="Organization:">ארגון:</strong> <span data-he="משרד הסביבה" data-en="Ministry of Environment">משרד הסביבה</span></p>
+          <p><strong data-he="תיאור:" data-en="Description:">תיאור:</strong> <span data-he="PM2.5, PM10, NO₂ - מדידות יומיות בכל ערי ישראל" data-en="PM2.5, PM10, NO₂ - daily measurements in all Israeli cities">PM2.5, PM10, NO₂ - מדידות יומיות בכל ערי ישראל</span></p>
+          <p><strong data-he="עדכון:" data-en="Update:">עדכון:</strong> <span data-he="יומי" data-en="Daily">יומי</span></p>
+          <p><strong data-he="משאבים:" data-en="Resources:">משאבים:</strong> <span data-he="8 קבצי נתונים" data-en="8 data files">8 קבצי נתונים</span></p>
         </div>
 
         <div class="data-card">
-          <h3>🏘️ שוק הדיור</h3>
-          <p><strong>ארגון:</strong> משרד הבנייה</p>
-          <p><strong>תיאור:</strong> מחירי דיור, מכירות, בנייה חדשה לפי שכונה</p>
-          <p><strong>עדכון:</strong> חודשי</p>
-          <p><strong>משאבים:</strong> 15 קבצי נתונים</p>
+          <h3>🏘️ <span data-he="שוק הדיור" data-en="Housing Market">שוק הדיור</span></h3>
+          <p><strong data-he="ארגון:" data-en="Organization:">ארגון:</strong> <span data-he="משרד הבנייה" data-en="Ministry of Construction">משרד הבנייה</span></p>
+          <p><strong data-he="תיאור:" data-en="Description:">תיאור:</strong> <span data-he="מחירי דיור, מכירות, בנייה חדשה לפי שכונה" data-en="Housing prices, sales, new construction by neighborhood">מחירי דיור, מכירות, בנייה חדשה לפי שכונה</span></p>
+          <p><strong data-he="עדכון:" data-en="Update:">עדכון:</strong> <span data-he="חודשי" data-en="Monthly">חודשי</span></p>
+          <p><strong data-he="משאבים:" data-en="Resources:">משאבים:</strong> <span data-he="15 קבצי נתונים" data-en="15 data files">15 קבצי נתונים</span></p>
         </div>
 
         <div class="data-card">
-          <h3>📚 נתוני חינוך</h3>
-          <p><strong>ארגון:</strong> משרד החינוך</p>
-          <p><strong>תיאור:</strong> בחינות בגרות, התפקדות, מוסדות חינוך</p>
-          <p><strong>עדכון:</strong> שנתי</p>
-          <p><strong>משאבים:</strong> 22 קבצי נתונים</p>
+          <h3>📚 <span data-he="נתוני חינוך" data-en="Education Data">נתוני חינוך</span></h3>
+          <p><strong data-he="ארגון:" data-en="Organization:">ארגון:</strong> <span data-he="משרד החינוך" data-en="Ministry of Education">משרד החינוך</span></p>
+          <p><strong data-he="תיאור:" data-en="Description:">תיאור:</strong> <span data-he="בחינות בגרות, התפקדות, מוסדות חינוך" data-en="Matriculation exams, enrollment, educational institutions">בחינות בגרות, התפקדות, מוסדות חינוך</span></p>
+          <p><strong data-he="עדכון:" data-en="Update:">עדכון:</strong> <span data-he="שנתי" data-en="Annually">שנתי</span></p>
+          <p><strong data-he="משאבים:" data-en="Resources:">משאבים:</strong> <span data-he="22 קבצי נתונים" data-en="22 data files">22 קבצי נתונים</span></p>
         </div>
 
         <div class="data-card">
-          <h3>🏥 בריאות הציבור</h3>
-          <p><strong>ארגון:</strong> משרד הבריאות</p>
-          <p><strong>תיאור:</strong> תמותה, מחלות, חיסונים, מתקנים רפואיים</p>
-          <p><strong>עדכון:</strong> חודשי</p>
-          <p><strong>משאבים:</strong> 18 קבצי נתונים</p>
+          <h3>🏥 <span data-he="בריאות הציבור" data-en="Public Health">בריאות הציבור</span></h3>
+          <p><strong data-he="ארגון:" data-en="Organization:">ארגון:</strong> <span data-he="משרד הבריאות" data-en="Ministry of Health">משרד הבריאות</span></p>
+          <p><strong data-he="תיאור:" data-en="Description:">תיאור:</strong> <span data-he="תמותה, מחלות, חיסונים, מתקנים רפואיים" data-en="Mortality, diseases, vaccinations, medical facilities">תמותה, מחלות, חיסונים, מתקנים רפואיים</span></p>
+          <p><strong data-he="עדכון:" data-en="Update:">עדכון:</strong> <span data-he="חודשי" data-en="Monthly">חודשי</span></p>
+          <p><strong data-he="משאבים:" data-en="Resources:">משאבים:</strong> <span data-he="18 קבצי נתונים" data-en="18 data files">18 קבצי נתונים</span></p>
         </div>
 
         <div class="data-card">
-          <h3>💼 תעסוקה ומשכנתאות</h3>
-          <p><strong>ארגון:</strong> משרד העבודה</p>
-          <p><strong>תיאור:</strong> בטלה, משכנתאות, סוגי עבודה</p>
-          <p><strong>עדכון:</strong> חודשי</p>
-          <p><strong>משאבים:</strong> 11 קבצי נתונים</p>
+          <h3>💼 <span data-he="תעסוקה ומשכנתאות" data-en="Employment & Mortgages">תעסוקה ומשכנתאות</span></h3>
+          <p><strong data-he="ארגון:" data-en="Organization:">ארגון:</strong> <span data-he="משרד העבודה" data-en="Ministry of Labor">משרד העבודה</span></p>
+          <p><strong data-he="תיאור:" data-en="Description:">תיאור:</strong> <span data-he="בטלה, משכנתאות, סוגי עבודה" data-en="Unemployment, mortgages, employment types">בטלה, משכנתאות, סוגי עבודה</span></p>
+          <p><strong data-he="עדכון:" data-en="Update:">עדכון:</strong> <span data-he="חודשי" data-en="Monthly">חודשי</span></p>
+          <p><strong data-he="משאבים:" data-en="Resources:">משאבים:</strong> <span data-he="11 קבצי נתונים" data-en="11 data files">11 קבצי נתונים</span></p>
         </div>
       </div>
     </div>
 
     <!-- DATA QUALITY & USAGE -->
     <div class="section">
-      <h2>📈 סטטיסטיקות שימוש</h2>
+      <h2 data-he="📈 סטטיסטיקות שימוש" data-en="📈 Usage Statistics">📈 סטטיסטיקות שימוש</h2>
       <div class="grid-2">
         <div class="data-card">
-          <h3>👥 משתמשים</h3>
-          <p>💻 <strong>12,000+</strong> משתמשים פעילים בחודש</p>
-          <p>📱 <strong>8,500+</strong> גישות דרך מובייל</p>
-          <p>🔍 <strong>500,000+</strong> חיפושים חודשיים</p>
-          <p>⬇️ <strong>150,000+</strong> הורדות קבצים</p>
+          <h3 data-he="👥 משתמשים" data-en="👥 Users">👥 משתמשים</h3>
+          <p>💻 <strong>12,000+</strong> <span data-he="משתמשים פעילים בחודש" data-en="active monthly users">משתמשים פעילים בחודש</span></p>
+          <p>📱 <strong>8,500+</strong> <span data-he="גישות דרך מובייל" data-en="mobile accesses">גישות דרך מובייל</span></p>
+          <p>🔍 <strong>500,000+</strong> <span data-he="חיפושים חודשיים" data-en="monthly searches">חיפושים חודשיים</span></p>
+          <p>⬇️ <strong>150,000+</strong> <span data-he="הורדות קבצים" data-en="file downloads">הורדות קבצים</span></p>
         </div>
 
         <div class="data-card">
-          <h3>🎯 איכות הנתונים</h3>
-          <p>✅ <strong>99.2%</strong> זמינות השירות</p>
-          <p>✅ <strong>98.5%</strong> דיוק הנתונים</p>
-          <p>✅ <strong>100%</strong> כיסוי ערים גדולות</p>
-          <p>✅ <strong>92%</strong> עדכון בזמן המתוכנן</p>
+          <h3 data-he="🎯 איכות הנתונים" data-en="🎯 Data Quality">🎯 איכות הנתונים</h3>
+          <p>✅ <strong>99.2%</strong> <span data-he="זמינות השירות" data-en="service availability">זמינות השירות</span></p>
+          <p>✅ <strong>98.5%</strong> <span data-he="דיוק הנתונים" data-en="data accuracy">דיוק הנתונים</span></p>
+          <p>✅ <strong>100%</strong> <span data-he="כיסוי ערים גדולות" data-en="coverage of major cities">כיסוי ערים גדולות</span></p>
+          <p>✅ <strong>92%</strong> <span data-he="עדכון בזמן המתוכנן" data-en="on-time updates">עדכון בזמן המתוכנן</span></p>
         </div>
       </div>
     </div>
 
     <footer>
-      <p>VOGIL - Government Transparency Dashboard | Powered by data.gov.il | Ministry of Interior</p>
+      <p data-he="VOGIL - Government Transparency Dashboard | Powered by data.gov.il | Ministry of Interior" data-en="VOGIL - Government Transparency Dashboard | Powered by data.gov.il | Ministry of Interior">VOGIL - Government Transparency Dashboard | Powered by data.gov.il | Ministry of Interior</p>
     </footer>
   </div>
 
   <script>
+    // Language Toggle
+    const LANGUAGE_KEY = 'vogil-language';
+    let currentLanguage = localStorage.getItem(LANGUAGE_KEY) || 'he';
+
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'he' ? 'en' : 'he';
+      localStorage.setItem(LANGUAGE_KEY, currentLanguage);
+      updateLanguage();
+    }
+
+    function updateLanguage() {
+      const html = document.documentElement;
+      const toggle = document.querySelector('.language-toggle');
+
+      if (currentLanguage === 'en') {
+        html.classList.add('en');
+        html.lang = 'en';
+        toggle.textContent = '🇮🇱 עברית';
+      } else {
+        html.classList.remove('en');
+        html.lang = 'he';
+        toggle.textContent = '🇬🇧 English';
+      }
+
+      // Update all translatable elements
+      document.querySelectorAll('[data-he][data-en]').forEach(el => {
+        const heText = el.getAttribute('data-he');
+        const enText = el.getAttribute('data-en');
+        el.textContent = currentLanguage === 'he' ? heText : enText;
+      });
+
+      // Update chart labels
+      updateCharts();
+    }
+
     function switchTab(tabName) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -542,45 +631,67 @@
       event.target.classList.add('active');
     }
 
-    // Initialize Charts
     const pieColors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#fa709a', '#30b0fe', '#f5af19', '#ff6b9d', '#c9184a'];
 
-    // 1. Organizations Distribution
-    new Chart(document.getElementById('orgChart'), {
-      type: 'doughnut',
-      data: {
-        labels: ['תחבורה', 'מיפוי', 'סביבה', 'משפטים', 'אוצר', 'בריאות', 'מים', 'באר שבע', 'רווחה', 'תרבות'],
-        datasets: [{
-          data: [185, 116, 84, 82, 60, 56, 49, 44, 39, 32],
-          backgroundColor: pieColors,
-          borderColor: '#fff',
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom' } }
-      }
-    });
+    let orgChartInstance;
+    let typeChartInstance;
 
-    // 2. Resource Types
-    new Chart(document.getElementById('typeChart'), {
-      type: 'bar',
-      data: {
-        labels: ['CSV', 'JSON', 'XML', 'API', 'PDF', 'Excel', 'ODS', 'אחר'],
-        datasets: [{
-          label: 'מספר קבצים',
-          data: [850, 420, 310, 250, 120, 85, 45, 15],
-          backgroundColor: '#667eea'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'top' } },
-        scales: { y: { beginAtZero: true } }
-      }
+    function updateCharts() {
+      // Destroy existing charts
+      if (orgChartInstance) orgChartInstance.destroy();
+      if (typeChartInstance) typeChartInstance.destroy();
+
+      const isEnglish = currentLanguage === 'en';
+
+      // 1. Organizations Distribution
+      const orgLabelsHe = ['תחבורה', 'מיפוי', 'סביבה', 'משפטים', 'אוצר', 'בריאות', 'מים', 'באר שבע', 'רווחה', 'תרבות'];
+      const orgLabelsEn = ['Transportation', 'Mapping', 'Environment', 'Justice', 'Finance', 'Health', 'Water', 'Beersheba', 'Welfare', 'Culture'];
+
+      orgChartInstance = new Chart(document.getElementById('orgChart'), {
+        type: 'doughnut',
+        data: {
+          labels: isEnglish ? orgLabelsEn : orgLabelsHe,
+          datasets: [{
+            data: [185, 116, 84, 82, 60, 56, 49, 44, 39, 32],
+            backgroundColor: pieColors,
+            borderColor: '#fff',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } }
+        }
+      });
+
+      // 2. Resource Types
+      const typeLabelsHe = ['CSV', 'JSON', 'XML', 'API', 'PDF', 'Excel', 'ODS', 'אחר'];
+      const typeLabelsEn = ['CSV', 'JSON', 'XML', 'API', 'PDF', 'Excel', 'ODS', 'Other'];
+      const typeLabelMain = isEnglish ? 'Number of Files' : 'מספר קבצים';
+
+      typeChartInstance = new Chart(document.getElementById('typeChart'), {
+        type: 'bar',
+        data: {
+          labels: isEnglish ? typeLabelsEn : typeLabelsHe,
+          datasets: [{
+            label: typeLabelMain,
+            data: [850, 420, 310, 250, 120, 85, 45, 15],
+            backgroundColor: '#667eea'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    }
+
+    // Initialize on page load
+    window.addEventListener('load', () => {
+      updateLanguage();
     });
   </script>
 </body>
