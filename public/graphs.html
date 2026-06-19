@@ -249,6 +249,7 @@
 
     <footer>
       <p>VOGIL - Government Data Visualization | Powered by Chart.js & data.gov.il</p>
+      <p style="margin-top: 10px; opacity: 0.8;">בוצע על ידי אסף אפלבאום | Created by Asaf Afelbaum</p>
     </footer>
   </div>
 
@@ -276,10 +277,10 @@
     new Chart(document.getElementById('chart2'), {
       type: 'bar',
       data: {
-        labels: ['תל אביב', 'ירושלים', 'חיפה', 'בנט', 'רמת גן', 'באר שבע'],
+        labels: ['תל אביב', 'ירושלים', 'חיפה', 'בנט', 'רמת גן', 'ראש העין', 'באר שבע'],
         datasets: [{
           label: 'מחיר דירה ממוצע (₪ מיליון)',
-          data: [2.8, 2.1, 1.4, 1.9, 2.3, 1.2],
+          data: [2.8, 2.1, 1.4, 1.9, 2.3, 1.85, 1.2],
           backgroundColor: barColors
         }]
       },
