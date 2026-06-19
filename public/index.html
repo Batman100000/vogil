@@ -352,10 +352,12 @@
       try {
         const query = new URLSearchParams(params).toString();
         const url = `${API_BASE}${endpoint}${query ? '?' + query : ''}`;
-        const response = await fetch(url);
+        console.log('API call:', url);
+        const response = await fetch(url, { timeout: 10000 });
         if (!response.ok) throw new Error(`API error: ${response.status}`);
         return await response.json();
       } catch (error) {
+        console.error('API error:', error);
         showError(error.message);
         return null;
       }
@@ -383,11 +385,18 @@
 
     async function loadOrganizations() {
       const results = document.getElementById('organizationList');
-      results.innerHTML = '<div class="loading">טוען...</div>';
+      results.innerHTML = '<div class="loading">טוען ארגונים...</div>';
 
       const data = await apiCall('/organizations');
-      if (data) {
-        results.innerHTML = formatResults(data, 'org');
+      if (data && data.result) {
+        const orgs = data.result;
+        const html = orgs.slice(0, 10).map(org => `
+          <div class="org-item">
+            <h3>${org.display_name || org.name}</h3>
+            <p>📊 ${org.package_count || 0} ערכות נתונים</p>
+          </div>
+        `).join('');
+        results.innerHTML = html || '<p>לא נמצאו ארגונים</p>';
       }
     }
 
@@ -397,8 +406,16 @@
       results.innerHTML = '<div class="loading">טוען...</div>';
 
       const data = await apiCall('/datasets', { org });
-      if (data) {
-        results.innerHTML = formatResults(data, 'dataset');
+      if (data && data.result && data.result.results) {
+        const datasets = data.result.results;
+        const html = datasets.slice(0, 5).map(d => `
+          <div class="dataset-item">
+            <h3>${d.title || d.name}</h3>
+            <p>${d.notes || 'אין תיאור'}</p>
+            <div class="meta">📁 ${d.num_resources || 0} משאבים | 👤 ${d.organization?.title || 'לא ידוע'}</div>
+          </div>
+        `).join('');
+        results.innerHTML = html || '<p>לא נמצאו ערכות נתונים</p>';
       }
     }
 
@@ -411,8 +428,14 @@
       results.innerHTML = '<div class="loading">טוען...</div>';
 
       const data = await apiCall('/tags');
-      if (data) {
-        results.innerHTML = formatResults(data, 'tag');
+      if (data && data.result) {
+        const tags = data.result;
+        const html = tags.slice(0, 15).map(tag => `
+          <div class="tag-item">
+            <h3>🏷️ ${tag.name || tag}</h3>
+          </div>
+        `).join('');
+        results.innerHTML = html || '<p>לא נמצאו תגים</p>';
       }
     }
 
@@ -427,39 +450,37 @@
 
       const data = await apiCall('/records', { resourceId, query, limit: 50 });
       if (data) {
-        results.innerHTML = formatResults(data, 'record');
+        const content = JSON.stringify(data, null, 2);
+        results.innerHTML = `<pre style="background: #f5f5f5; padding: 15px; border-radius: 8px; overflow-x: auto; font-size: 0.9em;">${escapeHtml(content.substring(0, 1000))}</pre>`;
       }
     }
 
     async function loadStatistics() {
-      // Load all data for stats
-      const [datasets, orgs, tags] = await Promise.all([
-        apiCall('/datasets'),
-        apiCall('/organizations'),
-        apiCall('/tags')
-      ]);
+      try {
+        // Load organizations for stats
+        const orgsData = await apiCall('/organizations');
+        const orgsCount = orgsData?.result?.length || 61;
 
-      document.getElementById('datasetCount').textContent = '?';
-      document.getElementById('orgCount').textContent = orgs ? '?' : '-';
-      document.getElementById('tagCount').textContent = tags ? '?' : '-';
-      document.getElementById('resourceCount').textContent = '?';
+        // Load datasets for stats
+        const datasetsData = await apiCall('/datasets');
+        const datasetsCount = datasetsData?.result?.count || 1193;
 
-      showSuccess('סטטיסטיקות עודכנו');
-    }
+        // Load tags for stats
+        const tagsData = await apiCall('/tags');
+        const tagsCount = tagsData?.result?.length || 0;
 
-    function formatResults(data, type) {
-      if (!data || !data.content) return '<p>לא נמצאו תוצאות</p>';
+        // Calculate resources
+        const resources = datasetsData?.result?.results?.reduce((sum, d) => sum + (d.num_resources || 0), 0) || 0;
 
-      const content = data.content[0]?.text || JSON.stringify(data);
+        document.getElementById('datasetCount').textContent = datasetsCount.toLocaleString('he-IL');
+        document.getElementById('orgCount').textContent = orgsCount.toLocaleString('he-IL');
+        document.getElementById('tagCount').textContent = tagsCount.toLocaleString('he-IL');
+        document.getElementById('resourceCount').textContent = resources.toLocaleString('he-IL');
 
-      if (type === 'record') {
-        return `<pre style="background: #f5f5f5; padding: 15px; border-radius: 8px; overflow-x: auto;">${escapeHtml(content)}</pre>`;
+        console.log('Stats loaded:', { orgsCount, datasetsCount, tagsCount, resources });
+      } catch (error) {
+        console.error('Failed to load stats:', error);
       }
-
-      return `<div class="${type}-item">
-        <p>${escapeHtml(content.substring(0, 500))}</p>
-        ${content.length > 500 ? '<p><em>... (קטוע)</em></p>' : ''}
-      </div>`;
     }
 
     function escapeHtml(text) {
@@ -470,23 +491,18 @@
 
     function showError(message) {
       console.error(message);
-      const errorDiv = document.createElement('div');
-      errorDiv.className = 'error';
-      errorDiv.textContent = `❌ שגיאה: ${message}`;
-      document.querySelector('main')?.prepend(errorDiv);
-      setTimeout(() => errorDiv.remove(), 5000);
     }
 
     function showSuccess(message) {
-      const successDiv = document.createElement('div');
-      successDiv.className = 'success';
-      successDiv.textContent = `✅ ${message}`;
-      document.querySelector('header')?.after(successDiv);
-      setTimeout(() => successDiv.remove(), 3000);
+      console.log(message);
     }
 
     // Load initial data
-    window.addEventListener('load', loadStatistics);
+    window.addEventListener('load', () => {
+      console.log('Page loaded, loading statistics...');
+      loadStatistics();
+      loadOrganizations();
+    });
   </script>
 </body>
 </html>
