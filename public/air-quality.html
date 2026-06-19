@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>פורטל מידע לאומי - Air Quality Analysis</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/nav-styles.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -192,6 +193,38 @@
   </style>
 </head>
 <body>
+  <nav class="top-nav">
+    <div class="top-nav-title">🇮🇱 פורטל מידע לאומי</div>
+    <div class="top-nav-content">
+      <div class="header-city-selector">
+        <label for="headerCitySelector" style="margin: 0;">בחר עיר:</label>
+        <select id="headerCitySelector">
+          <option value="">-- בחר --</option>
+          <option value="tel-aviv">תל אביב</option>
+          <option value="jerusalem">ירושלים</option>
+          <option value="haifa">חיפה</option>
+          <option value="beersheba">באר שבע</option>
+          <option value="rishon-lezion">ראש העין</option>
+          <option value="ramat-gan">רמת גן</option>
+          <option value="netanya">נתניה</option>
+          <option value="kfar-saba">כפר סבא</option>
+          <option value="ashdod">אשדוד</option>
+          <option value="ashkelon">אשקלון</option>
+        </select>
+      </div>
+    </div>
+    <button class="language-toggle" onclick="toggleLanguage()" style="position: static; margin: 0;">🇬🇧 EN</button>
+  </nav>
+  <div class="breadcrumb-nav">
+    <a href="/" class="breadcrumb-item" data-page="home">🏠 דאשבורד</a>
+    <a href="/analytics.html" class="breadcrumb-item" data-page="analytics">📊 ניתוחים</a>
+    <a href="/investment-insights.html" class="breadcrumb-item" data-page="investment">💰 השקעות</a>
+    <a href="/insights-dashboard.html" class="breadcrumb-item" data-page="insights">🔍 תובנות</a>
+    <a href="/graphs.html" class="breadcrumb-item" data-page="graphs">📈 גרפים</a>
+    <a href="/air-quality.html" class="breadcrumb-item active" data-page="air-quality">🌍 איכות אוויר</a>
+    <a href="/people-tech.html" class="breadcrumb-item" data-page="people-tech">👥 אנשים וטכנו</a>
+  </div>
+  <script src="/nav.js"></script>
   <script src="/city-selector.js"></script>
   <div class="container">
     <div class="nav-links">

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>פורטל מידע לאומי - Analytics & Insights</title>
+  <link rel="stylesheet" href="/nav-styles.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -160,6 +161,42 @@
   </style>
 </head>
 <body>
+  <!-- Fixed Top Navigation -->
+  <nav class="top-nav">
+    <div class="top-nav-title">🇮🇱 פורטל מידע לאומי</div>
+    <div class="top-nav-content">
+      <div class="header-city-selector">
+        <label for="headerCitySelector" style="margin: 0;">בחר עיר:</label>
+        <select id="headerCitySelector">
+          <option value="">-- בחר --</option>
+          <option value="tel-aviv">תל אביב</option>
+          <option value="jerusalem">ירושלים</option>
+          <option value="haifa">חיפה</option>
+          <option value="beersheba">באר שבע</option>
+          <option value="rishon-lezion">ראש העין</option>
+          <option value="ramat-gan">רמת גן</option>
+          <option value="netanya">נתניה</option>
+          <option value="kfar-saba">כפר סבא</option>
+          <option value="ashdod">אשדוד</option>
+          <option value="ashkelon">אשקלון</option>
+        </select>
+      </div>
+    </div>
+    <button class="language-toggle" onclick="toggleLanguage()" style="position: static; margin: 0;">🇬🇧 EN</button>
+  </nav>
+
+  <!-- Breadcrumb Navigation -->
+  <div class="breadcrumb-nav">
+    <a href="/" class="breadcrumb-item" data-page="home">🏠 דאשבורד</a>
+    <a href="/analytics.html" class="breadcrumb-item active" data-page="analytics">📊 ניתוחים</a>
+    <a href="/investment-insights.html" class="breadcrumb-item" data-page="investment">💰 השקעות</a>
+    <a href="/insights-dashboard.html" class="breadcrumb-item" data-page="insights">🔍 תובנות</a>
+    <a href="/graphs.html" class="breadcrumb-item" data-page="graphs">📈 גרפים</a>
+    <a href="/air-quality.html" class="breadcrumb-item" data-page="air-quality">🌍 איכות אוויר</a>
+    <a href="/people-tech.html" class="breadcrumb-item" data-page="people-tech">👥 אנשים וטכנו</a>
+  </div>
+
+  <script src="/nav.js"></script>
   <script src="/city-selector.js"></script>
   <div class="container">
     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
