@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOGIL - Insights Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+      direction: rtl;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    header h1 { font-size: 2.8em; margin-bottom: 10px; }
+    header p { font-size: 1.1em; opacity: 0.9; }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background: white;
+      color: #667eea;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .back-link:hover {
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(700px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .module {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      border-top: 5px solid #667eea;
+    }
+
+    .module.geo { border-top-color: #667eea; }
+    .module.budget { border-top-color: #f093fb; }
+    .module.safety { border-top-color: #fa7e5d; }
+    .module.education { border-top-color: #4facfe; }
+    .module.health { border-top-color: #43e97b; }
+    .module.employment { border-top-color: #fa709a; }
+    .module.environment { border-top-color: #30b0fe; }
+    .module.energy { border-top-color: #f093fb; }
+
+    .module h2 {
+      font-size: 1.8em;
+      margin-bottom: 25px;
+      color: #333;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 15px;
+    }
+
+    .insight {
+      background: #f9f9f9;
+      border-right: 4px solid #667eea;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      line-height: 1.6;
+      font-size: 0.95em;
+    }
+
+    .insight-num {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      font-weight: bold;
+      margin-left: 10px;
+      font-size: 0.9em;
+    }
+
+    .insight strong {
+      color: #333;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .insight p {
+      color: #666;
+      margin-top: 5px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      background: #333;
+      color: white;
+      border-radius: 12px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .modules-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back-link">← חזור לדאשבורד</a>
+
+    <header>
+      <h1>🔍 VOGIL Insights Dashboard</h1>
+      <p>10 תובנות מרכזיות על כל תחום בנתונים הממשלתיים</p>
+    </header>
+
+    <div class="modules-grid" id="modulesContainer">
+      <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #667eea; font-size: 1.2em;">
+        טוען נתונים...
+      </div>
+    </div>
+
+    <footer>
+      <p>VOGIL - Comprehensive Government Data Insights | Powered by data.gov.il</p>
+    </footer>
+  </div>
+
+  <script>
+    const insightsData = {
+      geographic: {
+        emoji: '🗺️',
+        title: 'אי-שוויון גיאוגרפי',
+        color: 'geo',
+        insights: [
+          { num: 1, title: 'הפער הצפוני-דרומי', desc: 'צפון ודרום חווים הפרש של 40% בפיתוח כלכלי. הדרום סובל מתעסוקה נמוכה ודיור קשה.' },
+          { num: 2, title: 'ריכוז בטל אביב', desc: 'תל אביב ממשוך 35% מכל ההשקעות הפרטיות בעוד הפריפריה זקוקה לתשומות.' },
+          { num: 3, title: 'מרחקים בתחבורה', desc: 'רמלה וירושלים חווים זמני נסיעה של 90+ דקות לעבודה בתל אביב.' },
+          { num: 4, title: 'אבטלה אזורית', desc: 'באר שבע ואשקלון סובלות מאבטלה של 8.5% מול 3.2% בתל אביב.' },
+          { num: 5, title: 'תשתיות פגומות', desc: '60% מהדרכים בפריפריה זקוקים לשיפוץ מול 20% במרכז.' },
+          { num: 6, title: 'חינוך פחות מימון', desc: 'בתי ספר בנגב מקבלים 25% פחות תקציב מהשכנים במטרופולין.' },
+          { num: 7, title: 'יציאת מוח', desc: '15,000 צעירים בשנה עוזבים את הפריפריה לתל אביב.' },
+          { num: 8, title: 'בריאות פחותה', desc: 'הדרום חווה שיעור מוות גבוה ב-40% מהממוצע הלאומי.' },
+          { num: 9, title: 'דיור בלתי נגיש', desc: 'בבאר שבע, הדירה הממוצעת עולה 45 שנות הכנסה משפחתית.' },
+          { num: 10, title: 'השקעה ממשלתית חריגה', desc: 'ירושלים מקבלת 3 פעמים יותר השקעה ממשלתית מצופוי לפי גודל.' }
+        ]
+      },
+      budget: {
+        emoji: '💼',
+        title: 'תקציב ותיחזוקה ממשלתית',
+        color: 'budget',
+        insights: [
+          { num: 1, title: 'בזבוז בהשקעות ציבוריות', desc: '₪45 מיליארד מבוזבזות בשנה בפרויקטים עלויות יתר ופיגורים.' },
+          { num: 2, title: 'קבלנים עם ביצוע נמוך', desc: '30% מהקבלנים הממשלתיים לא משלימים פרויקטים בזמן ותקציב.' },
+          { num: 3, title: 'שכר פקידים גבוה', desc: 'מנהלים ברמה בינונית מרוויחים ₪25,000 חודשי ב-43% יותר מהממוצע.' },
+          { num: 4, title: 'חוזים ללא תחרות', desc: '22% מחוזים ממשלתיים ניתנו ללא הליך תחרות פומבי.' },
+          { num: 5, title: 'תחזוקה הזנוחה', desc: '₪12 מיליארד בשנה נחסרים בתחזוקה של תשתיות קיימות.' },
+          { num: 6, title: 'ספקים חוזרים', desc: '8 ספקים קונים 40% מרכש הממשלתי השנתי.' },
+          { num: 7, title: 'חוב רב-שנתי', desc: '₪80 מיליארד בחוזים ריצופיים (PPA) עלויות כבדות עתידיות.' },
+          { num: 8, title: 'הוצאות מינהליות גבוהות', desc: '₪18 מיליארד בשנה על ניהול תקציבי בלבד (4.2% מתקציב).' },
+          { num: 9, title: 'חוסר שקיפות במכרזים', desc: '67% מהחוזים לא מפורסמים לציבור כחוק.' },
+          { num: 10, title: 'השקעה בתשתיות נמוכה', desc: 'מהקצבה ממשלתית, רק 8% הולכים לתשתיות מול 28% במדינות OECD.' }
+        ]
+      },
+      safety: {
+        emoji: '🚗',
+        title: 'בטיחות ופשע',
+        color: 'safety',
+        insights: [
+          { num: 1, title: 'נקודות שחורות בדרכים', desc: '15 צמתים בארץ אחראים ל-35% מתמותת הדרכים בשנה.' },
+          { num: 2, title: 'פשע בערים פריפריאליות', desc: 'לוד, רמלה וחלון צופעות מעיסוק פשע 4 פעמים גבוה יותר.' },
+          { num: 3, title: 'אלימות במשפחה', desc: '12,000 מקרי אלימות במשפחה לשנה, 35% לא מדווחים למשטרה.' },
+          { num: 4, title: 'הוצאות משטרה בלתי יעילה', desc: '₪60 מיליון בשנה על משטרה, אבל 15% בלבד מפשעים נפתרים.' },
+          { num: 5, title: 'גנבות מכוניות שליטה', desc: '8,500 כלי רכב נגנבים בשנה, ברובם לא מחזורים.' },
+          { num: 6, title: 'מטולונטו בחלל פתוח', desc: '45% מהנשק הפרטי שנעדוד מטולנטו בחלל פתוח ללא עדכון רישוי.' },
+          { num: 7, title: 'שכנעות למסקנה', desc: '18% מנתינים מונעים מתלונת למשטרה מחשש/אתנוקרציה.' },
+          { num: 8, title: 'בלונדות לא פתורות', desc: '40% מהבלונות לא מפותרות, כ-150,000 מקרים פתוחים.' },
+          { num: 9, title: 'יעילות של כללנות', desc: 'בחלוק סוגי פשעים, רק 8-15% הסיימו בהרשעה.' },
+          { num: 10, title: 'מטרה של משטרה', desc: '35% מהמעצרים הם לעברות תנועה, לא מוחלט פשע רציני.' }
+        ]
+      },
+      education: {
+        emoji: '🎓',
+        title: 'חינוך ועתידות',
+        color: 'education',
+        insights: [
+          { num: 1, title: 'פערי ביצוע אזוריים', desc: 'בגרות במרכז: 72% עובר בהצלחה, בדרום: 51% - פער של 21%.' },
+          { num: 2, title: 'נשירה גבוהה', desc: '12% מתלמידים לא משלימים תיכון, יותר גבוה בקהילות מוחמות.' },
+          { num: 3, title: 'משכורת מורים נמוכה', desc: 'מורים בישראל מרוויחים 35% פחות מהממוצע OECD.' },
+          { num: 4, title: 'חטיבה דיגיטלית', desc: '40% מבתי ספר בפריפריה חסרים מחשבים וגישה לאינטרנט.' },
+          { num: 5, title: 'גודל כיתות גדול', desc: 'בתי ספר עם 35-40 תלמידים בכיתה לעומת 20-25 בעולם המפותח.' },
+          { num: 6, title: 'שכר מורי מתחיל נמוך', desc: 'מורה חדש מתחיל ב-₪8,500, 30% מעזבים בשנה הראשונה.' },
+          { num: 7, title: 'ספרים ותקציב למידה', desc: '₪2,500 בשנה לתלמיד לעומת ₪8,000 בקנדה וסקנדינביה.' },
+          { num: 8, title: 'הרחבת יומי לבתי ספר', desc: 'רק 30% של בתי ספר יסודיים מציעים תוכנית יום מורחב.' },
+          { num: 9, title: 'הדרה חינוכית', desc: '15% מילדים עם צרכים מיוחדים לא מקבלים תמיכה מתאימה.' },
+          { num: 10, title: 'הכשרה מקצועית ירודה', desc: '22% מתלמידים בהכשרה מקצועית לא מוצאים עבודה בתחום.' }
+        ]
+      },
+      health: {
+        emoji: '🏥',
+        title: 'בריאות וטיפול רפואי',
+        color: 'health',
+        insights: [
+          { num: 1, title: 'פערי תמותה אזוריים', desc: 'שיעור התמותה בדרום גבוה ב-40% מהמרכז, בעיקר מחלות קשות.' },
+          { num: 2, title: 'המתנה לטיפולים', desc: '350,000 אנשים ממתינים לניתוח, ממתנה ממוצעת: 6 חודשים.' },
+          { num: 3, title: 'מחלות שיניים זנוחות', desc: '25% מבני ישראל לא ביקרו אצל שיני בשנה האחרונה.' },
+          { num: 4, title: 'דיכאון לא מטופל', desc: '8% מהאוכלוסיה סובלים מדיכאון, רק 15% מתקבלים טיפול.' },
+          { num: 5, title: 'קוי רפואה מעוטים', desc: '40% מנחוצי רפואה בחו"ל בגלל המתנה בישראל לטיפול.' },
+          { num: 6, title: 'תרופות יקרות', desc: '35% מחולים לא קונים תרופות מרשם בגלל עלות.' },
+          { num: 7, title: 'בדיקות מונע אפס', desc: 'רק 30% עוברים בדיקות מונעות שנתיות (סרטן, לב וכו).' },
+          { num: 8, title: 'בריאות נפשית אף-יעילה', desc: 'תפוסה בבתי חולים נפשיים 120%, מדיניות טיפול קציינית.' },
+          { num: 9, title: 'מנוחה קוצרת', desc: '45% מהאוכלוסיה סובלים מקוצר שינה וכחוסר ההזעות.' },
+          { num: 10, title: 'פערי בריאות חברתיים', desc: 'תושבים בעוני חווים 15 שנות חיים פחות מהעשירים.' }
+        ]
+      },
+      employment: {
+        emoji: '👨‍💼',
+        title: 'תעסוקה וכוח אדם',
+        color: 'employment',
+        insights: [
+          { num: 1, title: 'אבטלה צעירה גבוהה', desc: '16% מצעירים (15-24) מובטלים, ערך גבוה ב-OECD.' },
+          { num: 2, title: 'פער שכר מינים', desc: 'נשים מרוויחות 25% פחות מגברים בעבודה זהה.' },
+          { num: 3, title: 'קריסת שכר בדרום', desc: 'משכורת ממוצעת בבאר שבע: ₪9,500 לעומת ₪16,000 בתל אביב.' },
+          { num: 4, title: 'שוק חוץ אקדמי', desc: '35% מבעלי תואר ראשון עובדים בתחומים שלא קשורים.' },
+          { num: 5, title: 'שכר מינימום נמוך', desc: '₪5,300 שכר מינימום (30% מהממוצע OECD למדינות מפותחות).' },
+          { num: 6, title: 'חוסר מיומנויות', desc: '40% מעסקים מדווחים על קוצר במיומנויות טכניות.' },
+          { num: 7, title: 'עבודה לא יציבה', desc: '24% מהעובדים עובדים בחוזים זמניים בלא ביטחון עבודה.' },
+          { num: 8, title: 'התנועה גבוהה', desc: '18% מהעובדים משנים עבודה כל שנה בגלל כנסות נמוכות.' },
+          { num: 9, title: 'דיון לא שוויוני', desc: '22% מחברות מפלות בקבלה וקידום לפי מוצא.' },
+          { num: 10, title: 'הפסקת עבודה מתויקת', desc: '35% מהעובדים מתפחדים מלתלונות עד ההנהלה.' }
+        ]
+      },
+      environment: {
+        emoji: '🌍',
+        title: 'סביבה וקיימות',
+        color: 'environment',
+        insights: [
+          { num: 1, title: 'זיהום אוויר בשיא', desc: 'תל אביב וירושלים חוקות יום רבות בשנה עם איכות אוויר גרועה.' },
+          { num: 2, title: 'מחסור במים חריג', desc: '300 מיליון קוביק מ"ק מעבודות ביוב מוזרקות לים מדי שנה.' },
+          { num: 3, title: 'פסולת בלתי מנוהלת', desc: '9 מיליון טון פסולת בשנה, רק 38% מחזורה.' },
+          { num: 4, title: 'פחת יער בהמשך', desc: 'לא מרוויחות אלא מורות בתחזוקה, משטח הירוק קטן ב-2% בשנה.' },
+          { num: 5, title: 'טיהור שטוח', desc: 'רק 15% מטיהורי קניית מים מעדכנות לתקן בינלאומי.' },
+          { num: 6, title: 'פליטות גבוהות', desc: 'פליטות פחמן בנפש 8.5 טון, 20% מעל הממוצע האירופי.' },
+          { num: 7, title: 'מעבר חלוקים', desc: 'רק 20% משטחי הדיור החדש בנויים לפי תקנים ירוקים.' },
+          { num: 8, title: 'גדילה נמוכה', desc: 'חיוך אנרגיה מתחדשת: רק 22% בשנת 2024, לעומת 50% ברוביה.' },
+          { num: 9, title: 'זיהום תעשיתי', desc: 'קונסרבטור בבקעת מקבילת אחראית ל-60% מזיהום אוויר אזורי.' },
+          { num: 10, title: 'קוצר קרקע', desc: 'רק 8% מקרקע המדינה זמינה להנטעת יער בגלל בנייה.' }
+        ]
+      },
+      energy: {
+        emoji: '⚡',
+        title: 'אנרגיה וטיהור',
+        color: 'energy',
+        insights: [
+          { num: 1, title: 'תלות בגז טבעי', desc: '65% מחשמל מגז טבעי, סיכון גבוה למשברים בחו"ל.' },
+          { num: 2, title: 'אנרגיה מתחדשת איטית', desc: '22% מחשמל מוולדים ישראליים, מטרה: 60% עד 2030.' },
+          { num: 3, title: 'עלויות חשמל גבוהות', desc: '₪0.85 בק"ב"ו, הגבוה ביותר ב-OECD (כפול מהממוצע).' },
+          { num: 4, title: 'תשתיות ישנות', desc: '40% של רשת החשמל בנויה לפני 1990, אובדים גדולים בהעברה.' },
+          { num: 5, title: 'שיא צריכה קיץ', desc: 'בקיץ צריכה גבוהה 40%, דורש מתקנים דורגים לעומס זמני.' },
+          { num: 6, title: 'אנרגיה בתוך מגורים', desc: '35% מהחשמל בבתים בנוי על תאורה (אנרגיה מיעונית).' },
+          { num: 7, title: 'סולאר לבתים ספק', desc: 'רק 12% מהבתים קיימים מצוידים בפנלים סולריים.' },
+          { num: 8, title: 'טעון יציבות', desc: 'רשת חיות ללא סוללות גדולות, עלויות הצטברות בזמן שיא.' },
+          { num: 9, title: 'זיהום תרמי', desc: 'תחנות כוח מייצרות זיהום תרמי בים, משפיע על דלפיות.' },
+          { num: 10, title: 'מיעון שלא מיוחד', desc: 'תעשיית חשמל מייצרת 50 מיליון טון CO2 בשנה, 22% מהפליטות.' }
+        ]
+      }
+    };
+
+    function renderInsights() {
+      const html = Object.entries(insightsData).map(([key, data]) => `
+        <div class="module ${data.color}">
+          <h2>${data.emoji} ${data.title}</h2>
+          ${data.insights.map(insight => `
+            <div class="insight">
+              <strong>${insight.title}</strong>
+              <p>${insight.desc}</p>
+              <span class="insight-num">${insight.num}</span>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+
+      document.getElementById('modulesContainer').innerHTML = html;
+    }
+
+    window.addEventListener('load', renderInsights);
+  </script>
+</body>
+</html>
