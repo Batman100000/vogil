@@ -93,6 +93,42 @@ body[dir="rtl"] .top-nav {
   border-color: rgba(255, 255, 255, 0.5);
 }
 
+/* Refresh Data Button */
+.refresh-data-btn {
+  background: white;
+  color: var(--primary-color);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8em;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.refresh-data-btn:hover {
+  background: var(--accent-color);
+  color: white;
+  transform: scale(1.05);
+  animation: spin 0.6s linear;
+}
+
+.refresh-data-btn.loading {
+  opacity: 0.6;
+  pointer-events: none;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Language Toggle */
 .language-toggle {
   background: white;

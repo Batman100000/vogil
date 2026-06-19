@@ -96,3 +96,66 @@ if (document.readyState === 'loading') {
 
 // Re-init on page show (for back button)
 window.addEventListener('pageshow', updateBreadcrumb);
+
+// Global Refresh Data Function
+function refreshDataByCity() {
+  const selectedCity = document.getElementById('headerCitySelector')?.value || localStorage.getItem('vogil-selected-city');
+  const refreshBtn = document.getElementById('refreshDataBtn');
+
+  if (!selectedCity) {
+    console.warn('⚠️ בחר עיר קודם לכן');
+    alert('אנא בחר עיר קודם לכן');
+    return;
+  }
+
+  // Add loading animation
+  if (refreshBtn) {
+    refreshBtn.classList.add('loading');
+    refreshBtn.disabled = true;
+  }
+
+  console.log('🔄 מתחיל רענון נתונים עבור:', selectedCity);
+
+  // Simulate data refresh (in production, this would fetch from API)
+  setTimeout(() => {
+    console.log('📊 רענון נתונים עבור:', selectedCity);
+
+    // Dispatch custom event for pages to listen to
+    window.dispatchEvent(new CustomEvent('refreshData', {
+      detail: { city: selectedCity, timestamp: new Date() }
+    }));
+
+    // Remove loading animation
+    if (refreshBtn) {
+      refreshBtn.classList.remove('loading');
+      refreshBtn.disabled = false;
+    }
+
+    // Get city name
+    const citySelector = document.getElementById('headerCitySelector');
+    const cityLabel = citySelector ? citySelector.selectedOptions[0].text : selectedCity;
+    console.log('✅ נתונים רוענו בהצלחה עבור:', cityLabel);
+  }, 600);
+}
+
+// Initialize refresh button visibility on load
+window.addEventListener('load', () => {
+  const citySelector = document.getElementById('headerCitySelector');
+  const refreshBtn = document.getElementById('refreshDataBtn');
+
+  if (citySelector && refreshBtn) {
+    citySelector.addEventListener('change', () => {
+      if (citySelector.value) {
+        refreshBtn.style.display = 'block';
+      } else {
+        refreshBtn.style.display = 'none';
+      }
+    });
+
+    // Check if city already selected on load
+    const savedCity = localStorage.getItem('vogil-selected-city');
+    if (savedCity && citySelector.value) {
+      refreshBtn.style.display = 'block';
+    }
+  }
+});
