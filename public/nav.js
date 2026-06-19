@@ -35,6 +35,13 @@ function initNavigation() {
     } else {
       btn.classList.remove('active');
     }
+
+    // Add click handler for smooth navigation
+    btn.addEventListener('click', function(e) {
+      // Allow normal navigation
+      document.querySelectorAll('.breadcrumb-item').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+    });
   });
 
   // Update old nav buttons if they exist
@@ -78,6 +85,9 @@ function initNavigation() {
   window.addEventListener('cityChanged', (e) => {
     console.log('City changed to:', e.detail.city);
   });
+
+  // Re-init on page show (for back button)
+  window.addEventListener('pageshow', initNavigation);
 }
 
 function getCurrentPage() {
