@@ -1,14 +1,12 @@
 // Navigation Module - Consistent navigation across all pages
-const CURRENT_PAGE_KEY = 'vogil-current-page';
-
 const PAGES = [
-  { id: 'home', path: '/', he: '🏠 דאשבורד', en: '🏠 Dashboard', emoji: '🏠' },
-  { id: 'analytics', path: '/analytics.html', he: '📊 ניתוחים', en: '📊 Analytics', emoji: '📊' },
-  { id: 'investment', path: '/investment-insights.html', he: '💰 השקעות', en: '💰 Investment', emoji: '💰' },
-  { id: 'insights', path: '/insights-dashboard.html', he: '🔍 תובנות', en: '🔍 Insights', emoji: '🔍' },
-  { id: 'graphs', path: '/graphs.html', he: '📈 גרפים', en: '📈 Graphs', emoji: '📈' },
-  { id: 'air-quality', path: '/air-quality.html', he: '🌍 איכות אוויר', en: '🌍 Air Quality', emoji: '🌍' },
-  { id: 'people-tech', path: '/people-tech.html', he: '👥 People & Tech', en: '👥 People & Tech', emoji: '👥' }
+  { id: 'home', path: '/', he: '🏠 דאשבורד', en: '🏠 Dashboard' },
+  { id: 'analytics', path: '/analytics.html', he: '📊 ניתוחים', en: '📊 Analytics' },
+  { id: 'investment', path: '/investment-insights.html', he: '💰 השקעות', en: '💰 Investment' },
+  { id: 'insights', path: '/insights-dashboard.html', he: '🔍 תובנות', en: '🔍 Insights' },
+  { id: 'graphs', path: '/graphs.html', he: '📈 גרפים', en: '📈 Graphs' },
+  { id: 'air-quality', path: '/air-quality.html', he: '🌍 איכות אוויר', en: '🌍 Air Quality' },
+  { id: 'people-tech', path: '/people-tech.html', he: '👥 אנשים וטכנו', en: '👥 People & Tech' }
 ];
 
 const CITIES = {
@@ -24,82 +22,61 @@ const CITIES = {
   'ashkelon': { he: 'אשקלון', en: 'Ashkelon' }
 };
 
-function initNavigation() {
+function getCurrentPage() {
+  const path = window.location.pathname;
+  if (path === '/' || path === '' || path.includes('index.html')) return 'home';
+  if (path.includes('analytics')) return 'analytics';
+  if (path.includes('investment')) return 'investment';
+  if (path.includes('insights-dashboard')) return 'insights';
+  if (path.includes('graphs')) return 'graphs';
+  if (path.includes('air-quality')) return 'air-quality';
+  if (path.includes('people-tech')) return 'people-tech';
+  return 'home';
+}
+
+function updateBreadcrumb() {
   const currentPage = getCurrentPage();
+  const breadcrumbs = document.querySelectorAll('.breadcrumb-item');
 
-  // Update active breadcrumb items
-  document.querySelectorAll('.breadcrumb-item').forEach(btn => {
-    const pageId = btn.getAttribute('data-page');
+  breadcrumbs.forEach(item => {
+    const pageId = item.getAttribute('data-page');
     if (pageId === currentPage) {
-      btn.classList.add('active');
+      item.classList.add('active');
+      // Scroll into view if needed
+      item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } else {
-      btn.classList.remove('active');
-    }
-
-    // Add click handler for smooth navigation
-    btn.addEventListener('click', function(e) {
-      // Allow normal navigation
-      document.querySelectorAll('.breadcrumb-item').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-    });
-  });
-
-  // Update old nav buttons if they exist
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    const href = btn.getAttribute('href');
-    const pageId = PAGES.find(p => p.path === href)?.id;
-
-    if (pageId === currentPage) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
+      item.classList.remove('active');
     }
   });
+}
 
-  // Update city selectors if they exist
+function initNavigation() {
+  // Update breadcrumb on page load
+  updateBreadcrumb();
+
+  // Handle city selector
   const savedCity = localStorage.getItem('vogil-selected-city');
+  const citySelectors = [
+    document.getElementById('headerCitySelector'),
+    document.getElementById('citySelector')
+  ];
 
-  const headerCitySelector = document.getElementById('headerCitySelector');
-  if (headerCitySelector) {
-    if (savedCity) {
-      headerCitySelector.value = savedCity;
+  citySelectors.forEach(selector => {
+    if (selector) {
+      if (savedCity) {
+        selector.value = savedCity;
+      }
+      selector.addEventListener('change', (e) => {
+        localStorage.setItem('vogil-selected-city', e.target.value);
+        window.dispatchEvent(new CustomEvent('cityChanged', { detail: { city: e.target.value } }));
+      });
     }
-    headerCitySelector.addEventListener('change', (e) => {
-      localStorage.setItem('vogil-selected-city', e.target.value);
-      window.dispatchEvent(new CustomEvent('cityChanged', { detail: { city: e.target.value } }));
-    });
-  }
-
-  const citySelector = document.getElementById('citySelector');
-  if (citySelector) {
-    if (savedCity) {
-      citySelector.value = savedCity;
-    }
-    citySelector.addEventListener('change', (e) => {
-      localStorage.setItem('vogil-selected-city', e.target.value);
-      window.dispatchEvent(new CustomEvent('cityChanged', { detail: { city: e.target.value } }));
-    });
-  }
+  });
 
   // Listen for city changes
   window.addEventListener('cityChanged', (e) => {
-    console.log('City changed to:', e.detail.city);
+    console.log('📍 City selected:', e.detail.city);
   });
-
-  // Re-init on page show (for back button)
-  window.addEventListener('pageshow', initNavigation);
-}
-
-function getCurrentPage() {
-  const path = window.location.pathname;
-  if (path === '/' || path.includes('index.html')) return 'home';
-  if (path.includes('analytics.html')) return 'analytics';
-  if (path.includes('investment-insights.html')) return 'investment';
-  if (path.includes('insights-dashboard.html')) return 'insights';
-  if (path.includes('graphs.html')) return 'graphs';
-  if (path.includes('air-quality.html')) return 'air-quality';
-  if (path.includes('people-tech.html')) return 'people-tech';
-  return 'home';
 }
 
 function getSelectedCity() {
@@ -116,3 +93,6 @@ if (document.readyState === 'loading') {
 } else {
   initNavigation();
 }
+
+// Re-init on page show (for back button)
+window.addEventListener('pageshow', updateBreadcrumb);
