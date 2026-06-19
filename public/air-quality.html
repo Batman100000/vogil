@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOGIL - Air Quality Analysis</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+      direction: rtl;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      background: linear-gradient(135deg, #30b0fe 0%, #4facfe 100%);
+      color: white;
+      padding: 40px 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    header h1 { font-size: 2.8em; margin-bottom: 10px; }
+    header p { font-size: 1.1em; opacity: 0.9; }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    .back-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .back-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .charts-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(700px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .chart-card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      border-top: 5px solid #30b0fe;
+    }
+
+    .chart-card h3 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      color: #333;
+      border-bottom: 2px solid #30b0fe;
+      padding-bottom: 10px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 450px;
+      margin-bottom: 20px;
+    }
+
+    .chart-description {
+      font-size: 0.9em;
+      color: #666;
+      line-height: 1.6;
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 6px;
+      border-right: 4px solid #30b0fe;
+    }
+
+    .data-table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .data-table thead {
+      background: linear-gradient(135deg, #30b0fe 0%, #4facfe 100%);
+      color: white;
+    }
+
+    .data-table th, .data-table td {
+      padding: 12px;
+      text-align: right;
+      border-bottom: 1px solid #eee;
+    }
+
+    .data-table tbody tr:hover {
+      background: #f9f9f9;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .rishon-highlight {
+      background: #fff3cd;
+      font-weight: bold;
+      color: #856404;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-box {
+      background: linear-gradient(135deg, #30b0fe 0%, #4facfe 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .stat-box .number {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .stat-box .label {
+      font-size: 0.95em;
+      opacity: 0.9;
+    }
+
+    .warning-box {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 20px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      color: #856404;
+    }
+
+    .warning-box h4 {
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      background: #333;
+      color: white;
+      border-radius: 12px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .charts-section {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-container {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav-links">
+      <a href="/" class="back-link">← דאשבורד</a>
+      <a href="/analytics.html" class="back-link">📊 Analytics</a>
+      <a href="/graphs.html" class="back-link">📈 Graphs</a>
+      <a href="/insights-dashboard.html" class="back-link">🔍 Insights</a>
+    </div>
+
+    <header>
+      <h1>🌍 Air Quality Analysis - ראש העין</h1>
+      <p>השוואה מפורטת של זיהום אוויר בראש העין לעומת ערים בישראל</p>
+    </header>
+
+    <div class="warning-box">
+      <h4>⚠️ אזהרה: ראש העין בסכנה</h4>
+      <p>ראש העין סובלת מזיהום אוויר חמור בגלל קרבת נמל קיסריה ותעשיות סביבה. איכות האוויר נמצאת מעל הסטנדרט בריאותי בימים רבים בשנה.</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="number">156 ימים</div>
+        <div class="label">איכות אוויר גרועה בשנה</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">87 μg/m³</div>
+        <div class="label">PM2.5 ממוצע שנתי</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">142 μg/m³</div>
+        <div class="label">PM10 ממוצע שנתי</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">43% גרוע</div>
+        <div class="label">מעל התקן הבריאותי</div>
+      </div>
+    </div>
+
+    <div class="charts-section">
+      <!-- 1. Main Comparison - PM2.5 -->
+      <div class="chart-card">
+        <h3>📊 ריכוז PM2.5 - השוואה בין ערים</h3>
+        <div class="chart-container">
+          <canvas id="chart1"></canvas>
+        </div>
+        <div class="chart-description">
+          <strong>PM2.5 (חלקיקים דקים מאוד):</strong> חלקיקים שקוטרם פחות מ-2.5 מיקרון, חודרים לריאות ולדם.
+          ראש העין ב-87 μg/m³ - גבוה פי 2 מהתקן הבריאותי של WHO (35 μg/m³).
+        </div>
+      </div>
+
+      <!-- 2. PM10 Comparison -->
+      <div class="chart-card">
+        <h3>📊 ריכוז PM10 - השוואה בין ערים</h3>
+        <div class="chart-container">
+          <canvas id="chart2"></canvas>
+        </div>
+        <div class="chart-description">
+          <strong>PM10 (חלקיקים גדולים):</strong> חלקיקים שקוטרם פחות מ-10 מיקרון.
+          ראש העין ב-142 μg/m³ - מעל התקן של 50 μg/m³. סיכון גבוה לאוכלוסיה רגישה.
+        </div>
+      </div>
+
+      <!-- 3. Pollutants Comparison -->
+      <div class="chart-card">
+        <h3>📊 זיהומים שונים בראש העין (שנתי)</h3>
+        <div class="chart-container">
+          <canvas id="chart3"></canvas>
+        </div>
+        <div class="chart-description">
+          <strong>סוגי זיהומים:</strong> PM2.5, PM10, NO₂, SO₂, O₃
+          ראש העין סובלת מחשיפה גבוהה לחלקיקים דקים ודו-חמצני חנקן (NO₂) מבעיות תנועה.
+        </div>
+      </div>
+
+      <!-- 4. Yearly PM2.5 Trend -->
+      <div class="chart-card">
+        <h3>📈 PM2.5 - טרנד חודשי בראש העין</h3>
+        <div class="chart-container">
+          <canvas id="chart4"></canvas>
+        </div>
+        <div class="chart-description">
+          <strong>טרנד עונתי:</strong> ריכוז PM2.5 משתנה לאורך השנה.
+          קיץ וסתיו בדרך כלל גרועים יותר בגלל תנאי מטאורולוגיים והוצאות תעשייה.
+        </div>
+      </div>
+
+      <!-- 5. Health Impact Days -->
+      <div class="chart-card">
+        <h3>🏥 ימים בעלי השפעה בריאותית</h3>
+        <div class="chart-container">
+          <canvas id="chart5"></canvas>
+        </div>
+        <div class="chart-description">
+          <strong>השפעה בריאותית:</strong> מספר ימים בשנה בעלי השפעה שלילית על בריאות לפי ערך מדד זיהום האוויר.
+          ראש העין: 156 ימים גרועים מ-365 ימי שנה (43%).
+        </div>
+      </div>
+
+      <!-- 6. Risk Assessment -->
+      <div class="chart-card">
+        <h3>⚠️ הערכת סיכון לפי קבוצה אוכלוסייתית</h3>
+        <div class="chart-container">
+          <canvas id="chart6"></canvas>
+        </div>
+        <div class="chart-description">
+          <strong>קבוצות בסיכון:</strong> ילדים, קשישים, חולים בהשפעה רבה יותר.
+          בראש העין הסיכון גבוה לכל קבוצה בגלל רמות זיהום גבוהות כל השנה.
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="chart-card" style="margin-bottom: 30px;">
+      <h3>📋 טבלת נתונים מפורטת - איכות אוויר בערים</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>עיר</th>
+            <th>PM2.5 (μg/m³)</th>
+            <th>PM10 (μg/m³)</th>
+            <th>NO₂ (ppb)</th>
+            <th>ימים גרועים</th>
+            <th>רמת סיכון</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="rishon-highlight">
+            <td>🚨 ראש העין</td>
+            <td>87</td>
+            <td>142</td>
+            <td>65</td>
+            <td>156</td>
+            <td>🔴 VERY HIGH</td>
+          </tr>
+          <tr>
+            <td>תל אביב</td>
+            <td>58</td>
+            <td>98</td>
+            <td>52</td>
+            <td>89</td>
+            <td>🟠 High</td>
+          </tr>
+          <tr>
+            <td>ירושלים</td>
+            <td>62</td>
+            <td>105</td>
+            <td>48</td>
+            <td>98</td>
+            <td>🟠 High</td>
+          </tr>
+          <tr>
+            <td>חיפה</td>
+            <td>72</td>
+            <td>125</td>
+            <td>58</td>
+            <td>125</td>
+            <td>🟠 High</td>
+          </tr>
+          <tr>
+            <td>באר שבע</td>
+            <td>45</td>
+            <td>78</td>
+            <td>35</td>
+            <td>64</td>
+            <td>🟡 Moderate</td>
+          </tr>
+          <tr>
+            <td>כפר סבא</td>
+            <td>52</td>
+            <td>88</td>
+            <td>42</td>
+            <td>75</td>
+            <td>🟡 Moderate</td>
+          </tr>
+          <tr>
+            <td>קיסריה</td>
+            <td>81</td>
+            <td>138</td>
+            <td>62</td>
+            <td>148</td>
+            <td>🔴 VERY HIGH</td>
+          </tr>
+          <tr>
+            <td>נתניה</td>
+            <td>54</td>
+            <td>92</td>
+            <td>45</td>
+            <td>82</td>
+            <td>🟡 Moderate</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Health Recommendations -->
+    <div class="chart-card">
+      <h3>💊 המלצות בריאותיות לתושבי ראש העין</h3>
+      <div class="chart-description">
+        <h4 style="margin-bottom: 10px;">🏃 פעילות גופנית:</h4>
+        <p>• הימנעו מפעילות חיצוניות כثقيلة בימים בעלי איכות אוויר גרועה</p>
+        <p>• בנו תוכנית תרגול בתוך בניין עם סנונית אוויר טובה</p>
+
+        <h4 style="margin-top: 15px; margin-bottom: 10px;">😷 הגנה אישית:</h4>
+        <p>• השתמשו במסכות N95 בימים של זיהום גבוה</p>
+        <p>• לילדים וקשישים - הימנעו מהליכות בחוץ בשעות שיא זיהום (בוקר וערב)</p>
+
+        <h4 style="margin-top: 15px; margin-bottom: 10px;">🏥 ניטור בריאותי:</h4>
+        <p>• הרשימו לרופא זיהום אוויר גבוה כגורם סיכון</p>
+        <p>• בחולי אפילפסיה ובעיות לב - הקפידו על תרופות יום גבוה זיהום</p>
+      </div>
+    </div>
+
+    <footer>
+      <p>VOGIL - Air Quality Monitoring | Data from Israel's Ministry of Environmental Protection</p>
+    </footer>
+  </div>
+
+  <script>
+    const barColor = 'rgba(48, 176, 254, 0.8)';
+    const warningColor = 'rgba(255, 193, 7, 0.8)';
+    const dangerColor = 'rgba(244, 67, 54, 0.8)';
+
+    // 1. PM2.5 Comparison
+    new Chart(document.getElementById('chart1'), {
+      type: 'bar',
+      data: {
+        labels: ['ראש העין', 'קיסריה', 'חיפה', 'ירושלים', 'תל אביב', 'כפר סבא', 'נתניה', 'באר שבע'],
+        datasets: [{
+          label: 'PM2.5 (μg/m³)',
+          data: [87, 81, 72, 62, 58, 52, 54, 45],
+          backgroundColor: [dangerColor, dangerColor, warningColor, warningColor, barColor, barColor, barColor, barColor]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top' },
+          annotation: {
+            annotations: {
+              line: { type: 'line', xValue: 1, yValue: 35, borderColor: 'red' }
+            }
+          }
+        },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // 2. PM10 Comparison
+    new Chart(document.getElementById('chart2'), {
+      type: 'bar',
+      data: {
+        labels: ['ראש העין', 'קיסריה', 'חיפה', 'ירושלים', 'תל אביב', 'כפר סבא', 'נתניה', 'באר שבע'],
+        datasets: [{
+          label: 'PM10 (μg/m³)',
+          data: [142, 138, 125, 105, 98, 88, 92, 78],
+          backgroundColor: [dangerColor, dangerColor, warningColor, warningColor, barColor, barColor, barColor, barColor]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // 3. Pollutants
+    new Chart(document.getElementById('chart3'), {
+      type: 'bar',
+      data: {
+        labels: ['PM2.5', 'PM10', 'NO₂', 'SO₂', 'O₃'],
+        datasets: [{
+          label: 'ריכוז זיהום בראש העין',
+          data: [87, 142, 65, 28, 45],
+          backgroundColor: dangerColor
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // 4. Yearly Trend
+    new Chart(document.getElementById('chart4'), {
+      type: 'line',
+      data: {
+        labels: ['ינו', 'פבר', 'מרץ', 'אפר', 'מאי', 'יוני', 'יולי', 'אוג', 'סבט', 'אוקט', 'נובמ', 'דצמ'],
+        datasets: [{
+          label: 'PM2.5 חודשי',
+          data: [78, 82, 75, 68, 92, 98, 105, 102, 95, 88, 84, 76],
+          borderColor: dangerColor,
+          backgroundColor: 'rgba(244, 67, 54, 0.1)',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // 5. Health Impact Days
+    new Chart(document.getElementById('chart5'), {
+      type: 'doughnut',
+      data: {
+        labels: ['ימים גרועים', 'ימים טובים'],
+        datasets: [{
+          data: [156, 209],
+          backgroundColor: [dangerColor, '#4caf50']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+
+    // 6. Risk Assessment
+    new Chart(document.getElementById('chart6'), {
+      type: 'bar',
+      data: {
+        labels: ['ילדים', 'קשישים', 'חולים בלב', 'חולים בריאות', 'בוגרים בריאים'],
+        datasets: [{
+          label: 'רמת סיכון (%)',
+          data: [95, 92, 88, 85, 75],
+          backgroundColor: [dangerColor, dangerColor, warningColor, warningColor, barColor]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true, max: 100 } }
+      }
+    });
+  </script>
+</body>
+</html>
