@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOGIL - Graphs & Charts</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+      direction: rtl;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    header h1 { font-size: 2.8em; margin-bottom: 10px; }
+    header p { font-size: 1.1em; opacity: 0.9; }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    .back-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .back-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .chart-card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .chart-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .chart-card h3 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      color: #333;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 400px;
+      margin-bottom: 20px;
+    }
+
+    .chart-description {
+      font-size: 0.9em;
+      color: #666;
+      line-height: 1.6;
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      background: #333;
+      color: white;
+      border-radius: 12px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-container {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav-links">
+      <a href="/" class="back-link">← דאשבורד</a>
+      <a href="/analytics.html" class="back-link">📊 Analytics</a>
+      <a href="/people-tech.html" class="back-link">👥 People & Tech</a>
+      <a href="/insights-dashboard.html" class="back-link">🔍 Insights</a>
+    </div>
+
+    <header>
+      <h1>📈 VOGIL Graphs & Charts</h1>
+      <p>ויזואליזציות נתונים ממשלתיים בצורה גרפית</p>
+    </header>
+
+    <div class="charts-grid">
+      <!-- 1. Organizations Dataset Distribution - PIE -->
+      <div class="chart-card">
+        <h3>🏢 חלוקת ערכות נתונים לפי ארגון (Top 10)</h3>
+        <div class="chart-container">
+          <canvas id="chart1"></canvas>
+        </div>
+        <div class="chart-description">
+          התפלגות של ערכות הנתונים בין 10 הארגונים המובילים. משרד התחבורה מוביל עם 185 ערכות נתונים.
+        </div>
+      </div>
+
+      <!-- 2. Real Estate Market - BAR -->
+      <div class="chart-card">
+        <h3>🏠 שוק הנדלן - השוואת ערים</h3>
+        <div class="chart-container">
+          <canvas id="chart2"></canvas>
+        </div>
+        <div class="chart-description">
+          השוואת מחירי דירות ממוצעים בערים המרכזיות בישראל. תל אביב היקרה ביותר בממוצע ₪2.8M.
+        </div>
+      </div>
+
+      <!-- 3. Employment by Sector - PIE -->
+      <div class="chart-card">
+        <h3>👨‍💼 תעסוקה לפי סקטור</h3>
+        <div class="chart-container">
+          <canvas id="chart3"></canvas>
+        </div>
+        <div class="chart-description">
+          התפלגות כוח האדם בישראל לפי תחומי תעסוקה. שירותים מעסיקים 62% מעובדי הכלכלה.
+        </div>
+      </div>
+
+      <!-- 4. Government Budget Allocation - BAR -->
+      <div class="chart-card">
+        <h3>💼 הקצאת תקציב ממשלתי</h3>
+        <div class="chart-container">
+          <canvas id="chart4"></canvas>
+        </div>
+        <div class="chart-description">
+          חלוקת התקציב הממשלתי בין משרדים עיקריים. בריאות וחינוך מקבלים את ההקצאות הגדולות.
+        </div>
+      </div>
+
+      <!-- 5. Education Quality by Region - BAR -->
+      <div class="chart-card">
+        <h3>🎓 איכות חינוך לפי אזור</h3>
+        <div class="chart-container">
+          <canvas id="chart5"></canvas>
+        </div>
+        <div class="chart-description">
+          שיעור בגרות לפי אזור גיאוגרפי. המרכז מוביל עם 72% הצלחה בבחינות הבגרות.
+        </div>
+      </div>
+
+      <!-- 6. Air Quality Distribution - PIE -->
+      <div class="chart-card">
+        <h3>🌍 איכות אוויר בערים</h3>
+        <div class="chart-container">
+          <canvas id="chart6"></canvas>
+        </div>
+        <div class="chart-description">
+          התפלגות ימים בעלי איכות אוויר גרועה לפי עיר. תל אביב וירושלים סובלות מהכי הרבה ימים מזוהמים.
+        </div>
+      </div>
+
+      <!-- 7. Crime by Type - BAR -->
+      <div class="chart-card">
+        <h3>🚗 סוגי פשעים - חלוקה סטטיסטית</h3>
+        <div class="chart-container">
+          <canvas id="chart7"></canvas>
+        </div>
+        <div class="chart-description">
+          התפלגות סוגי הפשעים בישראל. גנבות וזעזועים מהווים 45% מהפשעים הדווחים.
+        </div>
+      </div>
+
+      <!-- 8. Energy Sources - PIE -->
+      <div class="chart-card">
+        <h3>⚡ מקורות אנרגיה בישראל</h3>
+        <div class="chart-container">
+          <canvas id="chart8"></canvas>
+        </div>
+        <div class="chart-description">
+          התפלגות מקורות אנרגיה ייצור. גז טבעי שולט ב-65%, אנרגיה מתחדשת רק 22%.
+        </div>
+      </div>
+
+      <!-- 9. Healthcare Spending - BAR -->
+      <div class="chart-card">
+        <h3>🏥 הוצאות בריאות לתושב</h3>
+        <div class="chart-container">
+          <canvas id="chart9"></canvas>
+        </div>
+        <div class="chart-description">
+          השוואת הוצאות בריאות שנתיות לתושב בקופות החולים הגדולות.
+        </div>
+      </div>
+
+      <!-- 10. Population Distribution - PIE -->
+      <div class="chart-card">
+        <h3>👥 התפלגות אוכלוסיה לפי אזור</h3>
+        <div class="chart-container">
+          <canvas id="chart10"></canvas>
+        </div>
+        <div class="chart-description">
+          התפלגות אוכלוסיית ישראל לפי אזור גיאוגרפי. המרכז מרוכז 45% מהאוכלוסיה.
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>VOGIL - Government Data Visualization | Powered by Chart.js & data.gov.il</p>
+    </footer>
+  </div>
+
+  <script>
+    // Chart Colors
+    const pieColors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#fa709a', '#30b0fe', '#f5af19'];
+    const barColors = 'rgba(102, 126, 234, 0.8)';
+
+    // 1. Organizations - PIE
+    new Chart(document.getElementById('chart1'), {
+      type: 'doughnut',
+      data: {
+        labels: ['תחבורה', 'מיפוי', 'סביבה', 'משפטים', 'אוצר', 'בריאות', 'מים', 'באר שבע', 'רווחה', 'תרבות'],
+        datasets: [{
+          data: [185, 116, 84, 82, 60, 56, 49, 44, 39, 32],
+          backgroundColor: pieColors,
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    // 2. Real Estate - BAR
+    new Chart(document.getElementById('chart2'), {
+      type: 'bar',
+      data: {
+        labels: ['תל אביב', 'ירושלים', 'חיפה', 'בנט', 'רמת גן', 'באר שבע'],
+        datasets: [{
+          label: 'מחיר דירה ממוצע (₪ מיליון)',
+          data: [2.8, 2.1, 1.4, 1.9, 2.3, 1.2],
+          backgroundColor: barColors
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+    });
+
+    // 3. Employment - PIE
+    new Chart(document.getElementById('chart3'), {
+      type: 'pie',
+      data: {
+        labels: ['שירותים', 'טכנולוגיה', 'סחר', 'בנייה', 'חינוך', 'בריאות', 'תחבורה', 'אחר'],
+        datasets: [{
+          data: [62, 12, 10, 8, 4, 2, 1, 1],
+          backgroundColor: pieColors,
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    // 4. Government Budget - BAR
+    new Chart(document.getElementById('chart4'), {
+      type: 'bar',
+      data: {
+        labels: ['בריאות', 'חינוך', 'הגנה', 'רווחה', 'תחבורה', 'דיור', 'סביבה'],
+        datasets: [{
+          label: 'תקציב (₪ מיליארד)',
+          data: [42, 35, 60, 28, 18, 12, 8],
+          backgroundColor: barColors
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+    });
+
+    // 5. Education Quality - BAR
+    new Chart(document.getElementById('chart5'), {
+      type: 'bar',
+      data: {
+        labels: ['מרכז', 'צפון', 'דרום', 'ירושלים', 'שומרון'],
+        datasets: [{
+          label: 'שיעור הצלחה בבגרות (%)',
+          data: [72, 64, 51, 68, 58],
+          backgroundColor: barColors
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+    });
+
+    // 6. Air Quality - PIE
+    new Chart(document.getElementById('chart6'), {
+      type: 'doughnut',
+      data: {
+        labels: ['תל אביב', 'ירושלים', 'חיפה', 'באר שבע', 'אחר'],
+        datasets: [{
+          data: [28, 22, 18, 15, 17],
+          backgroundColor: pieColors,
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    // 7. Crime by Type - BAR
+    new Chart(document.getElementById('chart7'), {
+      type: 'bar',
+      data: {
+        labels: ['גנבות', 'הונאה', 'אלימות', 'נזקים', 'מינויים', 'אחר'],
+        datasets: [{
+          label: 'מספר פשעים (אלפים)',
+          data: [45, 32, 28, 22, 18, 25],
+          backgroundColor: barColors
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+    });
+
+    // 8. Energy Sources - PIE
+    new Chart(document.getElementById('chart8'), {
+      type: 'pie',
+      data: {
+        labels: ['גז טבעי', 'אנרגיה סולארית', 'דלקות化石', 'רוח', 'אחר'],
+        datasets: [{
+          data: [65, 22, 8, 3, 2],
+          backgroundColor: pieColors,
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    // 9. Healthcare Spending - BAR
+    new Chart(document.getElementById('chart9'), {
+      type: 'bar',
+      data: {
+        labels: ['כללית', 'מכבי', 'לאומית', 'מאוחדת'],
+        datasets: [{
+          label: 'הוצאה לתושב (₪)',
+          data: [2850, 2720, 2680, 2900],
+          backgroundColor: barColors
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+    });
+
+    // 10. Population Distribution - PIE
+    new Chart(document.getElementById('chart10'), {
+      type: 'doughnut',
+      data: {
+        labels: ['מרכז', 'ירושלים', 'צפון', 'דרום', 'שומרון', 'גולן'],
+        datasets: [{
+          data: [45, 15, 18, 12, 8, 2],
+          backgroundColor: pieColors,
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+    });
+  </script>
+</body>
+</html>
