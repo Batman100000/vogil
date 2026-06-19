@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { spawn } from 'child_process';
+import https from 'https';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -12,109 +12,45 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Simple MCP Client
-let mcp = null;
-let mcpReady = false;
+const CKAN_API = 'https://data.gov.il/api/3/action';
 
-class MCPClient {
-  constructor() {
-    this.process = null;
-    this.messageId = 0;
-    this.callbacks = new Map();
-  }
+// Fetch from CKAN API
+async function fetchFromCKAN(endpoint, params = {}) {
+  return new Promise((resolve, reject) => {
+    const queryString = new URLSearchParams(params).toString();
+    const url = `${CKAN_API}/${endpoint}${queryString ? '?' + queryString : ''}`;
 
-  async init() {
-    console.log('Starting MCP server...');
-    try {
-      this.process = spawn('npx', ['-y', 'data-gov-il-mcp'], {
-        cwd: __dirname,
-        stdio: ['pipe', 'pipe', 'pipe'],
-        shell: true,
-        timeout: 30000
-      });
+    const urlObj = new URL(url);
+    const options = {
+      hostname: urlObj.hostname,
+      path: urlObj.pathname + urlObj.search,
+      method: 'GET',
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'VOGIL-Dashboard'
+      }
+    };
 
-      this.process.on('error', (err) => {
-        console.error('MCP process error:', err.message);
-      });
-
-      this.process.stdout.on('data', (data) => {
-        const text = data.toString().trim();
-        if (text) {
-          console.log('[MCP]', text);
-          this.handleResponse(text);
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => {
+        try {
+          resolve(JSON.parse(data));
+        } catch (e) {
+          reject(new Error('Invalid JSON response'));
         }
       });
-
-      this.process.stderr.on('data', (data) => {
-        console.error('[MCP Error]', data.toString().trim());
-      });
-
-      // Wait a bit for startup
-      await new Promise(r => setTimeout(r, 1000));
-      console.log('✅ MCP server initialized');
-      mcpReady = true;
-    } catch (error) {
-      console.warn('⚠️ MCP init issue (will retry on requests):', error.message);
-    }
-  }
-
-  async call(tool, args) {
-    if (!this.process) {
-      return { error: 'MCP not initialized' };
-    }
-
-    return new Promise((resolve, reject) => {
-      const id = ++this.messageId;
-      const timeout = setTimeout(() => {
-        this.callbacks.delete(id);
-        reject(new Error(`Timeout calling ${tool}`));
-      }, 20000);
-
-      this.callbacks.set(id, { resolve, reject, timeout });
-
-      const request = {
-        jsonrpc: '2.0',
-        id,
-        method: 'tools/call',
-        params: { name: tool, arguments: args }
-      };
-
-      try {
-        this.process.stdin.write(JSON.stringify(request) + '\n');
-      } catch (e) {
-        clearTimeout(timeout);
-        this.callbacks.delete(id);
-        reject(e);
-      }
     });
-  }
 
-  handleResponse(data) {
-    const lines = data.split('\n').filter(l => l.trim());
-    lines.forEach(line => {
-      try {
-        const msg = JSON.parse(line);
-        if (msg.id && this.callbacks.has(msg.id)) {
-          const { resolve, reject, timeout } = this.callbacks.get(msg.id);
-          clearTimeout(timeout);
-          this.callbacks.delete(msg.id);
-          if (msg.error) {
-            reject(new Error(msg.error.message || JSON.stringify(msg.error)));
-          } else {
-            resolve(msg.result);
-          }
-        }
-      } catch (e) {
-        // Parse error, ignore
-      }
+    req.on('timeout', () => {
+      req.destroy();
+      reject(new Error('Request timeout'));
     });
-  }
 
-  stop() {
-    if (this.process) {
-      this.process.kill();
-    }
-  }
+    req.on('error', reject);
+    req.end();
+  });
 }
 
 // Routes
@@ -123,30 +59,30 @@ app.get('/api/search', async (req, res) => {
     const { query } = req.query;
     if (!query) return res.status(400).json({ error: 'Missing query' });
 
-    const result = await mcp.call('find_datasets', { query });
-    res.json(result || { error: 'No result' });
+    const result = await fetchFromCKAN('package_search', { q: query, rows: 10 });
+    res.json(result);
   } catch (error) {
-    console.error('Search error:', error);
+    console.error('Search error:', error.message);
     res.status(500).json({ error: error.message });
   }
 });
 
 app.get('/api/organizations', async (req, res) => {
   try {
-    const result = await mcp.call('list_organizations', {});
-    res.json(result || { error: 'No result' });
+    const result = await fetchFromCKAN('organization_list', { all_fields: true, limit: 200 });
+    res.json(result);
   } catch (error) {
-    console.error('Orgs error:', error);
+    console.error('Orgs error:', error.message);
     res.status(500).json({ error: error.message });
   }
 });
 
 app.get('/api/tags', async (req, res) => {
   try {
-    const result = await mcp.call('list_available_tags', {});
-    res.json(result || { error: 'No result' });
+    const result = await fetchFromCKAN('tag_list', { all_fields: true, limit: 200 });
+    res.json(result);
   } catch (error) {
-    console.error('Tags error:', error);
+    console.error('Tags error:', error.message);
     res.status(500).json({ error: error.message });
   }
 });
@@ -154,10 +90,13 @@ app.get('/api/tags', async (req, res) => {
 app.get('/api/datasets', async (req, res) => {
   try {
     const { org } = req.query;
-    const result = await mcp.call('list_all_datasets', { organization: org || '' });
-    res.json(result || { error: 'No result' });
+    const result = await fetchFromCKAN('package_search', {
+      fq: org ? `organization:${org}` : '',
+      rows: 50
+    });
+    res.json(result);
   } catch (error) {
-    console.error('Datasets error:', error);
+    console.error('Datasets error:', error.message);
     res.status(500).json({ error: error.message });
   }
 });
@@ -165,10 +104,10 @@ app.get('/api/datasets', async (req, res) => {
 app.get('/api/dataset/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await mcp.call('get_dataset_info', { dataset_id: id });
-    res.json(result || { error: 'No result' });
+    const result = await fetchFromCKAN('package_show', { id });
+    res.json(result);
   } catch (error) {
-    console.error('Dataset info error:', error);
+    console.error('Dataset info error:', error.message);
     res.status(500).json({ error: error.message });
   }
 });
@@ -176,54 +115,42 @@ app.get('/api/dataset/:id', async (req, res) => {
 app.get('/api/records', async (req, res) => {
   try {
     const { resourceId, query, limit = 50 } = req.query;
-    const result = await mcp.call('search_records', {
+    if (!resourceId) return res.status(400).json({ error: 'Missing resourceId' });
+
+    const result = await fetchFromCKAN('datastore_search', {
       resource_id: resourceId,
-      query: query || '',
+      q: query || '',
       limit: Math.min(parseInt(limit) || 50, 100)
     });
-    res.json(result || { error: 'No result' });
+    res.json(result);
   } catch (error) {
-    console.error('Records error:', error);
+    console.error('Records error:', error.message);
     res.status(500).json({ error: error.message });
   }
 });
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', mcpReady });
+  res.json({ status: 'ok', apiReady: true });
 });
 
 // Start server
 const PORT = process.env.PORT || 3000;
 
-async function start() {
-  try {
-    // Initialize MCP client
-    mcp = new MCPClient();
-    await mcp.init();
+app.listen(PORT, () => {
+  console.log(`\n✅ VOGIL Dashboard running on http://localhost:${PORT}\n`);
+  console.log('Using direct CKAN API: ' + CKAN_API);
+  console.log('\nAvailable endpoints:');
+  console.log('  GET /api/search?query=...');
+  console.log('  GET /api/organizations');
+  console.log('  GET /api/datasets');
+  console.log('  GET /api/tags');
+  console.log('  GET /api/records?resourceId=...&query=...');
+  console.log('  GET /api/health');
+  console.log('\nPress Ctrl+C to stop\n');
+});
 
-    // Start Express server
-    app.listen(PORT, () => {
-      console.log(`\n✅ VOGIL Dashboard running on http://localhost:${PORT}\n`);
-      console.log('Available endpoints:');
-      console.log('  GET /api/search?query=...');
-      console.log('  GET /api/organizations');
-      console.log('  GET /api/datasets');
-      console.log('  GET /api/tags');
-      console.log('  GET /api/records?resourceId=...&query=...');
-      console.log('  GET /api/health');
-      console.log('\nPress Ctrl+C to stop\n');
-    });
-
-    process.on('SIGINT', () => {
-      console.log('\n\nShutting down...');
-      if (mcp) mcp.stop();
-      process.exit(0);
-    });
-  } catch (error) {
-    console.error('Failed to start:', error);
-    process.exit(1);
-  }
-}
-
-start();
+process.on('SIGINT', () => {
+  console.log('\n\nShutting down...');
+  process.exit(0);
+});

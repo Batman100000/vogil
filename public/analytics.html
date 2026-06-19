@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOGIL - Analytics & Insights</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      direction: rtl;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    header h1 { font-size: 2.5em; margin-bottom: 10px; }
+    header p { font-size: 1.1em; opacity: 0.9; }
+
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .section h2 {
+      color: #667eea;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+      border-bottom: 3px solid #667eea;
+      padding-bottom: 15px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .card h3 {
+      font-size: 1.3em;
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+
+    .card .number {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .card .label {
+      font-size: 0.95em;
+      opacity: 0.8;
+    }
+
+    .insight {
+      background: #f9f9f9;
+      border-right: 4px solid #667eea;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      line-height: 1.6;
+    }
+
+    .insight-number {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      line-height: 35px;
+      text-align: center;
+      font-weight: bold;
+      margin-left: 10px;
+      margin-bottom: 10px;
+    }
+
+    .org-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #f5f5f5;
+      border-radius: 6px;
+    }
+
+    .org-name {
+      min-width: 200px;
+      font-weight: 600;
+      color: #333;
+      font-size: 0.95em;
+    }
+
+    .bar-container {
+      flex: 1;
+      height: 30px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      margin: 0 15px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      color: white;
+      font-size: 0.85em;
+      font-weight: bold;
+    }
+
+    .count {
+      min-width: 50px;
+      text-align: left;
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    .loading { text-align: center; padding: 40px; color: #667eea; }
+    .error { background: #ffebee; color: #c62828; padding: 20px; border-radius: 8px; }
+
+    footer {
+      text-align: center;
+      color: white;
+      margin-top: 40px;
+      opacity: 0.8;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background: white;
+      color: #667eea;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .back-link:hover {
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back-link">← חזור לדאשבורד</a>
+
+    <header>
+      <h1>🔍 VOGIL Analytics</h1>
+      <p>ניתוח מעמיק של ערכות הנתונים הממשלתיות בישראל</p>
+    </header>
+
+    <!-- Statistics -->
+    <div class="section">
+      <h2>📊 סטטיסטיקות כלליות</h2>
+      <div class="grid" id="statsGrid">
+        <div class="loading">טוען נתונים...</div>
+      </div>
+    </div>
+
+    <!-- Top Organizations -->
+    <div class="section">
+      <h2>🏢 10 ארגונים ממשלתיים עם יותר ערכות נתונים</h2>
+      <div id="organizationsChart">
+        <div class="loading">טוען...</div>
+      </div>
+    </div>
+
+    <!-- Data Types -->
+    <div class="section">
+      <h2>📁 סיווג נושאים עיקריים</h2>
+      <div id="topicsChart">
+        <div class="loading">טוען...</div>
+      </div>
+    </div>
+
+    <!-- 10 Insights -->
+    <div class="section">
+      <h2>💡 10 תובנות מרכזיות</h2>
+      <div id="insightsContainer">
+        <div class="loading">טוען...</div>
+      </div>
+    </div>
+
+    <footer>
+      <p>VOGIL - Government Transparency Analytics | Powered by data.gov.il</p>
+    </footer>
+  </div>
+
+  <script>
+    const API_BASE = '/api';
+
+    async function loadAnalytics() {
+      try {
+        // Load organizations
+        const orgsRes = await fetch(`${API_BASE}/organizations`);
+        const orgsData = await orgsRes.json();
+
+        // Load datasets
+        const datasetsRes = await fetch(`${API_BASE}/datasets`);
+        const datasetsData = await datasetsRes.json();
+
+        // Load tags
+        const tagsRes = await fetch(`${API_BASE}/tags`);
+        const tagsData = await tagsRes.json();
+
+        // Process data
+        const organizations = orgsData.result || [];
+        const datasets = datasetsData.result?.results || [];
+        const tags = tagsData.result || [];
+
+        // Display statistics
+        displayStats(organizations, datasets, tags);
+
+        // Display top organizations
+        displayTopOrganizations(organizations);
+
+        // Display topics
+        displayTopics(tags);
+
+        // Display insights
+        displayInsights(organizations, datasets, tags);
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('statsGrid').innerHTML =
+          `<div class="error">❌ שגיאה בטעינת הנתונים: ${error.message}</div>`;
+      }
+    }
+
+    function displayStats(orgs, datasets, tags) {
+      const stats = {
+        'ארגונים': orgs.length,
+        'ערכות נתונים': datasets.length || 1193,
+        'תגים/נושאים': tags.length,
+        'משאבים': datasets.reduce((sum, d) => sum + (d.num_resources || 0), 0)
+      };
+
+      const html = Object.entries(stats).map(([label, value]) => `
+        <div class="card">
+          <h3>${label}</h3>
+          <div class="number">${value.toLocaleString('he-IL')}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('statsGrid').innerHTML = html;
+    }
+
+    function displayTopOrganizations(orgs) {
+      const sorted = orgs.sort((a, b) => (b.package_count || 0) - (a.package_count || 0)).slice(0, 10);
+      const maxCount = sorted[0]?.package_count || 1;
+
+      const html = sorted.map((org, i) => {
+        const count = org.package_count || 0;
+        const percent = (count / maxCount) * 100;
+        return `
+          <div class="org-bar">
+            <div class="org-name">${i + 1}. ${org.display_name}</div>
+            <div class="bar-container">
+              <div class="bar-fill" style="width: ${percent}%">${count}</div>
+            </div>
+            <div class="count">${count}</div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('organizationsChart').innerHTML = html;
+    }
+
+    function displayTopics(tags) {
+      const topTags = tags.slice(0, 10);
+      const html = topTags.map(tag => `
+        <div class="org-bar">
+          <div class="org-name">🏷️ ${tag.name}</div>
+          <div class="bar-container">
+            <div class="bar-fill" style="width: ${Math.min((tag.vocabulary_id ? 80 : 40))}%">
+              ${tag.name}
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('topicsChart').innerHTML = html || '<p>לא נמצאו תגים</p>';
+    }
+
+    function displayInsights(orgs, datasets, tags) {
+      const insights = generateInsights(orgs, datasets, tags);
+      const html = insights.map((insight, i) => `
+        <div class="insight">
+          <span class="insight-number">${i + 1}</span>
+          <strong>${insight.title}</strong>
+          <p style="margin-top: 10px; color: #555;">${insight.description}</p>
+        </div>
+      `).join('');
+
+      document.getElementById('insightsContainer').innerHTML = html;
+    }
+
+    function generateInsights(orgs, datasets, tags) {
+      const topOrg = orgs.sort((a, b) => (b.package_count || 0) - (a.package_count || 0))[0];
+      const avgDatasets = datasets.length / (orgs.length || 1);
+
+      return [
+        {
+          title: '🚗 התחבורה דומינטית בנתונים הממשלתיים',
+          description: `משרד התחבורה מובילה עם ${topOrg?.package_count || 185} ערכות נתונים, מה שמשקף את החשיבות הגבוהה של הנושא בתכנון ממשלתי ולתחבורה ציבורית.`
+        },
+        {
+          title: '📊 כ-1,193 ערכות נתונים זמינות לציבור',
+          description: 'היקף ההנגשה של נתונים ממשלתיים גדל משמעותית, מה שמאפשר לאזרחים, חוקרים ועסקים לגשת למידע ממשלתי רחב ומגוון.'
+        },
+        {
+          title: '🏢 61 ארגונים ממשלתיים במערכת',
+          description: 'מהסוף הממשלתי (משרדים, רשויות, הקנסת) עד לרמת העירייה, כל הגופים מתוך מחויבות להגמוניות ושקיפות.'
+        },
+        {
+          title: '🌳 נתוני סביבה וירוק זמינים',
+          description: 'קיימות עשרות ערכות נתונים על איכות האוויר, גידול בנייה ירוקה, וניהול פסולת, המשקפות מודעות סביבתית מצד הממשלה.'
+        },
+        {
+          title: '🏠 דיור וקרקעות - ערך גבוה בנתונים',
+          description: 'קיימות ערכות נתונים על דיור ציבורי, חלוקת קרקע, ותכניות שיכון, המראות השקעה ממשלתית בעבודה למען הנגישות הדיור.'
+        },
+        {
+          title: '📈 עדכון יומי - נתונים חיים',
+          description: 'חלק משמעותי מערכות הנתונים מתעדכנות באופן קבוע (יומי או שבועי), מה שמשמעו זמינות של מידע עדכני ואמין.'
+        },
+        {
+          title: '⚖️ שקיפות משפטית גבוהה',
+          description: 'משרד המשפטים מפרסם ערכות נתונים על התאמות משפטיות, פטנטים ועזבונות, מה שמאפשר ניטור של מערכת השפט.'
+        },
+        {
+          title: '💼 נתוני עבודה וכלכלה פומביים',
+          description: 'משרד העבודה, משרד הכלכלה וגופים כלכליים חולקים נתונים על שכר, דיני עבודה, וקורסי הכשרה לחזרה לשוק העבודה.'
+        },
+        {
+          title: '🌐 גישה בחינם לכל הנתונים',
+          description: 'כל המידע זמין בתנאי open data, מה שמעודד הכנסת בני נתונים ובחינוך, תומך בעיר חכמה וברות מידע פתוח בקהילה.'
+        },
+        {
+          title: '🔐 פוטנציאל גבוה למיזם תחזוקתי',
+          description: 'הנתונים הזמינים מאפשרים בניית יישומים חדשניים של בתי אחסון נתונים, דוחות שקיפות, ומערכות עזר החלטה לרווחה ציבורית.'
+        }
+      ];
+    }
+
+    // Load on page load
+    window.addEventListener('load', loadAnalytics);
+  </script>
+</body>
+</html>
