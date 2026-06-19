@@ -236,10 +236,6 @@
         </div>
       </div>
 
-      <div class="section">
-        <h2>📋 קטגוריות אנשים</h2>
-        <div id="peopleCategories"></div>
-      </div>
     </div>
 
     <!-- TECHNOLOGY TAB -->
@@ -257,10 +253,6 @@
         </div>
       </div>
 
-      <div class="section">
-        <h2>🔧 קטגוריות טכנולוגיה</h2>
-        <div id="techCategories"></div>
-      </div>
     </div>
 
     <!-- DATASETS TAB -->
@@ -328,15 +320,6 @@
     }
 
     function loadPeopleData() {
-      const html = peopleData.categories.map(cat => `
-        <div class="list-item">
-          <h4>👤 ${cat.name}</h4>
-          <p>${cat.description}</p>
-          <span class="badge">📊 ${cat.count} רשומות</span>
-        </div>
-      `).join('');
-      document.getElementById('peopleCategories').innerHTML = html;
-
       const peopleHtml = peopleData.people.map(p => `
         <div class="person-card">
           <h3>👥 ${p.name}</h3>
@@ -349,15 +332,6 @@
     }
 
     function loadTechnologyData() {
-      const html = technologyData.categories.map(cat => `
-        <div class="list-item">
-          <h4>🔧 ${cat.name}</h4>
-          <p>${cat.description}</p>
-          <span class="badge">📊 ${cat.count} פרויקטים</span>
-        </div>
-      `).join('');
-      document.getElementById('techCategories').innerHTML = html;
-
       const techHtml = technologyData.technologies.map(t => `
         <div class="tech-card">
           <h3>💻 ${t.name}</h3>
