@@ -58,13 +58,29 @@
     }
 
     header {
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       color: white;
       margin-bottom: 20px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 30px 20px;
+      padding: 20px 30px;
       border-radius: 12px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      gap: 20px;
+    }
+
+    header .header-title-section {
+      flex: 1;
+      text-align: center;
+      margin-right: 20px;
+    }
+
+    header .header-city-section {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     header h1 {
@@ -326,22 +342,6 @@
   <nav class="top-nav">
     <div class="top-nav-title">🇮🇱</div>
     <div class="top-nav-content">
-      <div class="header-city-selector">
-        <label for="headerCitySelector" style="margin: 0;">בחר עיר:</label>
-        <select id="headerCitySelector">
-          <option value="">-- בחר --</option>
-          <option value="tel-aviv">תל אביב</option>
-          <option value="jerusalem">ירושלים</option>
-          <option value="haifa">חיפה</option>
-          <option value="beersheba">באר שבע</option>
-          <option value="rishon-lezion">ראש העין</option>
-          <option value="ramat-gan">רמת גן</option>
-          <option value="netanya">נתניה</option>
-          <option value="kfar-saba">כפר סבא</option>
-          <option value="ashdod">אשדוד</option>
-          <option value="ashkelon">אשקלון</option>
-        </select>
-      </div>
       <button id="refreshDataBtn" class="refresh-data-btn" onclick="refreshDataByCity()" title="רענן נתונים עבור העיר" style="display: none;">🔄 רענן נתונים</button>
     </div>
     <button class="language-toggle" onclick="toggleLanguage()" style="position: static; margin: 0;">🇬🇧 EN</button>
@@ -362,8 +362,26 @@
 
   <div class="container">
     <header>
-      <h1 data-he="🏠 דאשבורד" data-en="🏠 Dashboard">🏠 דאשבורד</h1>
-      <p data-he="פורטל מידע ממשלתי לישראל - מחפש ולומד בזמן אמת" data-en="Israel Government Data Portal - Real-time Explorer">פורטל מידע ממשלתי לישראל - מחפש ולומד בזמן אמת</p>
+      <div class="header-city-section">
+        <label for="headerCitySelector" style="margin: 0; font-weight: 600; white-space: nowrap;">בחר עיר:</label>
+        <select id="headerCitySelector" style="padding: 6px 10px; border-radius: 6px; border: none; background: white; color: #333; font-weight: 600;">
+          <option value="">-- בחר --</option>
+          <option value="tel-aviv">תל אביב</option>
+          <option value="jerusalem">ירושלים</option>
+          <option value="haifa">חיפה</option>
+          <option value="beersheba">באר שבע</option>
+          <option value="rishon-lezion">ראש העין</option>
+          <option value="ramat-gan">רמת גן</option>
+          <option value="netanya">נתניה</option>
+          <option value="kfar-saba">כפר סבא</option>
+          <option value="ashdod">אשדוד</option>
+          <option value="ashkelon">אשקלון</option>
+        </select>
+      </div>
+      <div class="header-title-section">
+        <h1 data-he="🏠 דאשבורד" data-en="🏠 Dashboard">🏠 דאשבורד</h1>
+        <p data-he="פורטל מידע ממשלתי לישראל - מחפש ולומד בזמן אמת" data-en="Israel Government Data Portal - Real-time Explorer">פורטל מידע ממשלתי לישראל - מחפש ולומד בזמן אמת</p>
+      </div>
     </header>
 
     <!-- KEY STATISTICS -->
