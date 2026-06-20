@@ -226,6 +226,54 @@
   </div>
   <script src="/nav.js"></script>
   <script src="/city-selector.js"></script>
+  <script>
+    function updateAirQualityTitles() {
+      const selectedCity = getSelectedCity();
+      const cityData = selectedCity ? getCityData(selectedCity) : null;
+      const cityName = cityData ? cityData.name : 'ראש העין';
+
+      // Update header
+      const headerP = document.querySelector('header p');
+      if (headerP) {
+        headerP.textContent = `השוואה מפורטת של זיהום אוויר ב${cityName} לעומת ערים בישראל`;
+      }
+
+      // Update chart titles
+      const chartTitles = {
+        'chart1': `📊 זיהומים שונים ב${cityName} (שנתי)`,
+        'chart2': `📈 PM2.5 - טרנד חודשי ב${cityName}`,
+        'chart3': `📊 ריכוז זיהום ב${cityName}`,
+        'chart4': `🌍 השוואת זיהום אוויר ב${cityName}`,
+        'chart5': `📈 PM2.5 לעומת PM10 ב${cityName}`,
+        'chart6': `⚠️ רמות סיכון בריאותי ב${cityName}`
+      };
+
+      Object.entries(chartTitles).forEach(([chartId, title]) => {
+        const chartCard = document.querySelector(`#${chartId}`)?.closest('.chart-card');
+        if (chartCard) {
+          const h3 = chartCard.querySelector('h3');
+          if (h3) h3.textContent = title;
+        }
+      });
+    }
+
+    // Update on load
+    window.addEventListener('DOMContentLoaded', updateAirQualityTitles);
+
+    // Update when city changes
+    window.addEventListener('cityChanged', updateAirQualityTitles);
+
+    // Also listen for header city selector changes
+    document.addEventListener('DOMContentLoaded', () => {
+      const headerCitySelector = document.getElementById('headerCitySelector');
+      if (headerCitySelector) {
+        headerCitySelector.addEventListener('change', (e) => {
+          localStorage.setItem('vogil-selected-city', e.target.value);
+          updateAirQualityTitles();
+        });
+      }
+    });
+  </script>
   <div class="container">
     <div class="nav-links">
       <a href="/" class="back-link">← דאשבורד</a>
