@@ -183,16 +183,29 @@
 
     .grid-2 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
       margin-bottom: 30px;
+    }
+
+    @media (max-width: 1200px) {
+      .grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
     }
 
     .data-card {
       background: #f9f9f9;
       border-right: 4px solid #667eea;
-      padding: 20px;
+      padding: 15px;
       border-radius: 8px;
+      font-size: 0.95em;
     }
 
     .en .data-card {
@@ -202,15 +215,16 @@
 
     .data-card h3 {
       color: #667eea;
-      font-size: 1.3em;
-      margin-bottom: 12px;
+      font-size: 1.1em;
+      margin-bottom: 8px;
+      font-weight: 600;
     }
 
     .data-card p {
       color: #555;
-      line-height: 1.6;
-      font-size: 0.95em;
-      margin-bottom: 8px;
+      line-height: 1.4;
+      font-size: 0.9em;
+      margin-bottom: 5px;
     }
 
     .data-card strong {
