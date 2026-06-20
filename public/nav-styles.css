@@ -13,7 +13,7 @@
 /* Top Navigation Bar - Fixed */
 .top-nav {
   position: fixed;
-  top: 0;
+  top: 50px;
   left: 0;
   right: 0;
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
@@ -24,8 +24,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
 }
 
 body.en .top-nav {
@@ -158,27 +157,29 @@ body[dir="rtl"] .top-nav {
   gap: 6px;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 15px 20px;
+  padding: 12px 20px;
   margin: 0;
-  background: #f8f9fa;
-  border-bottom: 2px solid var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  border-bottom: none;
   align-items: center;
-  position: sticky;
-  top: 56px;
-  z-index: 998;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .breadcrumb-item {
-  padding: 10px 16px;
-  background: white;
-  color: var(--primary-color);
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
   text-decoration: none;
   border-radius: 6px;
-  font-weight: 600;
-  font-size: 0.9em;
+  font-weight: 500;
+  font-size: 0.85em;
   transition: all 0.3s ease;
-  border: 2px solid transparent;
+  border: none;
   cursor: pointer;
   display: inline-block;
 }
@@ -190,11 +191,10 @@ body[dir="rtl"] .top-nav {
 }
 
 .breadcrumb-item.active {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  background: rgba(255, 255, 255, 0.25);
   color: white;
-  border-color: var(--secondary-color);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-weight: 600;
 }
 
 .breadcrumb-item.active::before {
@@ -205,7 +205,7 @@ body[dir="rtl"] .top-nav {
 
 /* Adjust body padding for fixed header and breadcrumb */
 body {
-  padding-top: 110px;
+  padding-top: 120px;
 }
 
 /* Main container spacing */
@@ -265,7 +265,7 @@ header {
   }
 
   body {
-    padding-top: 100px;
+    padding-top: 120px;
   }
 }
 
