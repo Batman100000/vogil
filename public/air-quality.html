@@ -209,16 +209,32 @@
         <label for="headerCitySelector" style="margin: 0;">בחר עיר:</label>
         <select id="headerCitySelector">
           <option value="">-- בחר --</option>
-          <option value="tel-aviv">תל אביב</option>
-          <option value="jerusalem">ירושלים</option>
-          <option value="haifa">חיפה</option>
-          <option value="beersheba">באר שבע</option>
-          <option value="rishon-lezion">ראש העין</option>
-          <option value="ramat-gan">רמת גן</option>
-          <option value="netanya">נתניה</option>
-          <option value="kfar-saba">כפר סבא</option>
-          <option value="ashdod">אשדוד</option>
-          <option value="ashkelon">אשקלון</option>
+          <option value="rishon-lezion">🔴 ראש העין (87)</option>
+          <option value="petah-tikva">🔴 פתח תקווה (85)</option>
+          <option value="caesarea">🔴 קיסריה (81)</option>
+          <option value="haifa">🟠 חיפה (72)</option>
+          <option value="holon">🟠 חולון (70)</option>
+          <option value="bat-yam">🟠 בת ים (68)</option>
+          <option value="givatayim">🟡 גבעתיים (66)</option>
+          <option value="jerusalem">🟡 ירושלים (62)</option>
+          <option value="bnei-brak">🟡 בני ברק (61)</option>
+          <option value="lod">🟡 לוד (59)</option>
+          <option value="tel-aviv">🟡 תל אביב (58)</option>
+          <option value="givat-shmuel">🟡 גבעת שמואל (56)</option>
+          <option value="nahariya">🟡 נהריה (55)</option>
+          <option value="netanya">🟡 נתניה (54)</option>
+          <option value="ramla">🟡 רמלה (61)</option>
+          <option value="ramat-gan">🟢 רמת גן (52)</option>
+          <option value="kfar-saba">🟢 כפר סבא (52)</option>
+          <option value="afula">🟢 עפולה (51)</option>
+          <option value="ashkelon">🟢 אשקלון (50)</option>
+          <option value="modiin">🟢 מודיעין (49)</option>
+          <option value="ashdod">🟢 אשדוד (48)</option>
+          <option value="tiberias">🟢 טבריה (46)</option>
+          <option value="beersheba">🟢 באר שבע (45)</option>
+          <option value="safed">🟢 צפת (42)</option>
+          <option value="eilat">🟢 אילת (35)</option>
+          <option value="mitzpe-ramon">🟢 מצפה רמון (32)</option>
         </select>
       </div>
       <button id="refreshDataBtn" class="refresh-data-btn" onclick="refreshDataByCity()" title="רענן נתונים עבור העיר" style="display: none;">🔄 רענן נתונים</button>
@@ -425,110 +441,32 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="rishon-highlight">
-            <td>🚨 ראש העין</td>
-            <td>87</td>
-            <td>142</td>
-            <td>65</td>
-            <td>156</td>
-            <td>🔴 VERY HIGH</td>
-          </tr>
-          <tr>
-            <td>תל אביב</td>
-            <td>58</td>
-            <td>98</td>
-            <td>52</td>
-            <td>89</td>
-            <td>🟠 High</td>
-          </tr>
-          <tr>
-            <td>ירושלים</td>
-            <td>62</td>
-            <td>105</td>
-            <td>48</td>
-            <td>98</td>
-            <td>🟠 High</td>
-          </tr>
-          <tr>
-            <td>חיפה</td>
-            <td>72</td>
-            <td>125</td>
-            <td>58</td>
-            <td>125</td>
-            <td>🟠 High</td>
-          </tr>
-          <tr>
-            <td>באר שבע</td>
-            <td>45</td>
-            <td>78</td>
-            <td>35</td>
-            <td>64</td>
-            <td>🟡 Moderate</td>
-          </tr>
-          <tr>
-            <td>כפר סבא</td>
-            <td>52</td>
-            <td>88</td>
-            <td>42</td>
-            <td>75</td>
-            <td>🟡 Moderate</td>
-          </tr>
-          <tr>
-            <td>קיסריה</td>
-            <td>81</td>
-            <td>138</td>
-            <td>62</td>
-            <td>148</td>
-            <td>🔴 VERY HIGH</td>
-          </tr>
-          <tr>
-            <td>נתניה</td>
-            <td>54</td>
-            <td>92</td>
-            <td>45</td>
-            <td>82</td>
-            <td>🟡 Moderate</td>
-          </tr>
-          <tr>
-            <td>בתר יהודה</td>
-            <td>68</td>
-            <td>115</td>
-            <td>55</td>
-            <td>112</td>
-            <td>🟠 High</td>
-          </tr>
-          <tr>
-            <td>רמת גן</td>
-            <td>55</td>
-            <td>95</td>
-            <td>48</td>
-            <td>78</td>
-            <td>🟡 Moderate</td>
-          </tr>
-          <tr>
-            <td>אשדוד</td>
-            <td>48</td>
-            <td>82</td>
-            <td>38</td>
-            <td>68</td>
-            <td>🟡 Moderate</td>
-          </tr>
-          <tr>
-            <td>אשקלון</td>
-            <td>50</td>
-            <td>85</td>
-            <td>40</td>
-            <td>72</td>
-            <td>🟡 Moderate</td>
-          </tr>
-          <tr>
-            <td>בית שמש</td>
-            <td>60</td>
-            <td>105</td>
-            <td>50</td>
-            <td>95</td>
-            <td>🟠 High</td>
-          </tr>
+          <tr class="rishon-highlight"><td>🔴 ראש העין</td><td>87</td><td>142</td><td>65</td><td>156</td><td>🔴 VERY HIGH</td></tr>
+          <tr><td>🔴 פתח תקווה</td><td>85</td><td>138</td><td>63</td><td>152</td><td>🔴 VERY HIGH</td></tr>
+          <tr><td>🔴 קיסריה</td><td>81</td><td>138</td><td>62</td><td>148</td><td>🔴 VERY HIGH</td></tr>
+          <tr><td>🟠 חיפה</td><td>72</td><td>125</td><td>58</td><td>125</td><td>🟠 High</td></tr>
+          <tr><td>🟠 חולון</td><td>70</td><td>120</td><td>56</td><td>112</td><td>🟠 High</td></tr>
+          <tr><td>🟠 בת ים</td><td>68</td><td>118</td><td>54</td><td>108</td><td>🟠 High</td></tr>
+          <tr><td>🟡 גבעתיים</td><td>66</td><td>112</td><td>52</td><td>105</td><td>🟠 High</td></tr>
+          <tr><td>🟡 ירושלים</td><td>62</td><td>105</td><td>48</td><td>98</td><td>🟠 High</td></tr>
+          <tr><td>🟡 בני ברק</td><td>61</td><td>102</td><td>46</td><td>95</td><td>🟠 High</td></tr>
+          <tr><td>🟡 רמלה</td><td>61</td><td>100</td><td>47</td><td>92</td><td>🟠 High</td></tr>
+          <tr><td>🟡 לוד</td><td>59</td><td>98</td><td>49</td><td>85</td><td>🟡 Moderate</td></tr>
+          <tr><td>🟡 תל אביב</td><td>58</td><td>95</td><td>52</td><td>82</td><td>🟡 Moderate</td></tr>
+          <tr><td>🟡 גבעת שמואל</td><td>56</td><td>93</td><td>50</td><td>80</td><td>🟡 Moderate</td></tr>
+          <tr><td>🟡 נהריה</td><td>55</td><td>91</td><td>48</td><td>79</td><td>🟡 Moderate</td></tr>
+          <tr><td>🟡 נתניה</td><td>54</td><td>92</td><td>45</td><td>78</td><td>🟡 Moderate</td></tr>
+          <tr><td>🟢 רמת גן</td><td>52</td><td>88</td><td>42</td><td>75</td><td>🟡 Moderate</td></tr>
+          <tr><td>🟢 כפר סבא</td><td>52</td><td>85</td><td>40</td><td>72</td><td>🟡 Moderate</td></tr>
+          <tr><td>🟢 עפולה</td><td>51</td><td>86</td><td>43</td><td>73</td><td>🟡 Moderate</td></tr>
+          <tr><td>🟢 אשקלון</td><td>50</td><td>86</td><td>40</td><td>72</td><td>🟡 Moderate</td></tr>
+          <tr><td>🟢 מודיעין</td><td>49</td><td>84</td><td>39</td><td>70</td><td>🟡 Moderate</td></tr>
+          <tr><td>🟢 אשדוד</td><td>48</td><td>82</td><td>38</td><td>68</td><td>🟡 Moderate</td></tr>
+          <tr><td>🟢 טבריה</td><td>46</td><td>80</td><td>35</td><td>66</td><td>🟢 Low</td></tr>
+          <tr><td>🟢 באר שבע</td><td>45</td><td>78</td><td>35</td><td>64</td><td>🟢 Low</td></tr>
+          <tr><td>🟢 צפת</td><td>42</td><td>72</td><td>32</td><td>58</td><td>🟢 Low</td></tr>
+          <tr><td>🟢 אילת</td><td>35</td><td>62</td><td>25</td><td>42</td><td>🟢 Very Low</td></tr>
+          <tr><td>🟢 מצפה רמון</td><td>32</td><td>58</td><td>22</td><td>38</td><td>🟢 Very Low</td></tr>
         </tbody>
       </table>
     </div>
