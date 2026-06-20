@@ -66,12 +66,12 @@ function initNavigation() {
 
   citySelectors.forEach(selector => {
     if (selector) {
-      if (savedCity) {
-        selector.value = savedCity;
-        // Show refresh button if city is already selected
-        if (refreshBtn && headerCitySelector === selector) {
-          refreshBtn.style.display = 'block';
-        }
+      // Set default to Tel Aviv if no saved city
+      const cityToSet = savedCity || 'tel-aviv';
+      selector.value = cityToSet;
+      // Show refresh button if city is already selected (default or saved)
+      if (refreshBtn && headerCitySelector === selector) {
+        refreshBtn.style.display = 'block';
       }
       selector.addEventListener('change', (e) => {
         localStorage.setItem('vogil-selected-city', e.target.value);
@@ -93,7 +93,7 @@ function initNavigation() {
 }
 
 function getSelectedCity() {
-  return localStorage.getItem('vogil-selected-city') || '';
+  return localStorage.getItem('vogil-selected-city') || 'tel-aviv';
 }
 
 function getCityName(cityId, lang = 'he') {

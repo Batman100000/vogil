@@ -18,11 +18,9 @@ function initCitySelector() {
   const citySelector = document.getElementById('citySelector');
   if (!citySelector) return;
 
-  // Load saved city
-  const savedCity = localStorage.getItem(CITY_KEY);
-  if (savedCity) {
-    citySelector.value = savedCity;
-  }
+  // Load saved city or set default to Tel Aviv
+  const savedCity = localStorage.getItem(CITY_KEY) || 'tel-aviv';
+  citySelector.value = savedCity;
 
   // Save city when changed
   citySelector.addEventListener('change', (e) => {
@@ -35,7 +33,7 @@ function initCitySelector() {
 }
 
 function getSelectedCity() {
-  return localStorage.getItem(CITY_KEY) || '';
+  return localStorage.getItem(CITY_KEY) || 'tel-aviv';
 }
 
 function getCityData(cityId) {
