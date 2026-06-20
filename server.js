@@ -134,6 +134,19 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', apiReady: true });
 });
 
+// SPA fallback - serve corresponding HTML files for navigation paths
+app.get('/:page', (req, res) => {
+  const { page } = req.params;
+  const htmlFile = path.join(__dirname, 'public', `${page}.html`);
+
+  res.sendFile(htmlFile, (err) => {
+    if (err) {
+      // If file doesn't exist, serve index.html (SPA fallback)
+      res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    }
+  });
+});
+
 // Start server
 const PORT = process.env.PORT || 3000;
 
