@@ -827,5 +827,69 @@
       updateLanguage();
     });
   </script>
+
+  <!-- Footer -->
+  <footer style="background: #333; color: white; padding: 30px 20px; margin-top: 60px; text-align: center; font-size: 0.9em;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <p style="margin-bottom: 15px;">
+        <strong data-he="פותח על ידי: אפלבאום אסף" data-en="Developed by: Asaf Apelbaum">פותח על ידי: אפלבאום אסף</strong>
+      </p>
+      <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 15px;">
+        <a href="#accessibility" style="color: #4ade80; text-decoration: none;" onclick="showAccessibility();" data-he="הצהרת נגישות" data-en="Accessibility Statement">הצהרת נגישות</a>
+        <span style="color: #666;">|</span>
+        <a href="#privacy" style="color: #4ade80; text-decoration: none;" onclick="showPrivacy();" data-he="מדיניות פרטיות" data-en="Privacy Policy">מדיניות פרטיות</a>
+        <span style="color: #666;">|</span>
+        <a href="https://github.com/Batman100000/vogil" style="color: #4ade80; text-decoration: none;" data-he="קוד המקור" data-en="Source Code">קוד המקור</a>
+      </div>
+      <p style="color: #999; font-size: 0.85em; margin: 0;">
+        © 2026 <span data-he="פורטל מידע לאומי" data-en="National Information Portal">פורטל מידע לאומי</span> |
+        <span data-he="כל הזכויות שמורות" data-en="All rights reserved">כל הזכויות שמורות</span>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Accessibility Modal -->
+  <div id="accessibilityModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 2000; overflow-y: auto;">
+    <div style="background: white; max-width: 600px; margin: 50px auto; padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+      <button onclick="document.getElementById('accessibilityModal').style.display='none';" style="float: right; background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+      <h2 data-he="הצהרת נגישות" data-en="Accessibility Statement">הצהרת נגישות</h2>
+      <div style="color: #333; line-height: 1.8;">
+        <p data-he="אנו מתחייבים לעשות את פורטל מידע לאומי נגיש לכל האנשים, כולל אלה שיש להם מוגבלויות." data-en="We are committed to making the National Information Portal accessible to all people, including those with disabilities.">אנו מתחייבים לעשות את פורטל מידע לאומי נגיש לכל האנשים, כולל אלה שיש להם מוגבלויות.</p>
+        <h3 data-he="תכונות נגישות:" data-en="Accessibility Features:">תכונות נגישות:</h3>
+        <ul>
+          <li data-he="תמיכה בתצוגה בשתי שפות (עברית ואנגלית)" data-en="Support for two-language display (Hebrew and English)">תמיכה בתצוגה בשתי שפות (עברית ואנגלית)</li>
+          <li data-he="עיצוב מגיב שעובד על כל גדלי המסך" data-en="Responsive design that works on all screen sizes">עיצוב מגיב שעובד על כל גדלי המסך</li>
+          <li data-he="ניווט קלוד עם מקשי מקלדת" data-en="Easy navigation with keyboard shortcuts">ניווט קלוד עם מקשי מקלדת</li>
+          <li data-he="ניגודיות צבעים נכונה לקריאה" data-en="Proper color contrast for readability">ניגודיות צבעים נכונה לקריאה</li>
+        </ul>
+        <p data-he="אם יש לך שאלות או הצעות לשיפור הנגישות, אנא צור איתנו קשר." data-en="If you have questions or suggestions for improving accessibility, please contact us.">אם יש לך שאלות או הצעות לשיפור הנגישות, אנא צור איתנו קשר.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Modal -->
+  <div id="privacyModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 2000; overflow-y: auto;">
+    <div style="background: white; max-width: 600px; margin: 50px auto; padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+      <button onclick="document.getElementById('privacyModal').style.display='none';" style="float: right; background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+      <h2 data-he="מדיניות פרטיות" data-en="Privacy Policy">מדיניות פרטיות</h2>
+      <div style="color: #333; line-height: 1.8;">
+        <h3 data-he="אסוף נתונים" data-en="Data Collection">אסוף נתונים</h3>
+        <p data-he="אנו אוספים רק מידע הנדרש לתפעול הפורטל. זה כולל בחירות עיר שלך וההעדפות השפה המאוחסנות בהתקן שלך בלבד." data-en="We collect only information required to operate the portal. This includes your city selections and language preferences stored locally on your device only.">אנו אוספים רק מידע הנדרש לתפעול הפורטל. זה כולל בחירות עיר שלך וההעדפות השפה המאוחסנות בהתקן שלך בלבד.</p>
+        <h3 data-he="שימוש בנתונים" data-en="Data Usage">שימוש בנתונים</h3>
+        <p data-he="המידע שלך משמש רק כדי לשפר את חוויית הפורטל. אנחנו לא משתפים מידע עם צדדים שלישיים." data-en="Your information is used only to improve your portal experience. We do not share information with third parties.">המידע שלך משמש רק כדי לשפר את חוויית הפורטל. אנחנו לא משתפים מידע עם צדדים שלישיים.</p>
+        <h3 data-he="אחסון מקומי" data-en="Local Storage">אחסון מקומי</h3>
+        <p data-he="כל הנתונים מאוחסנים בהתקן שלך בלבד. אין שרתים חיצוניים." data-en="All data is stored on your device only. There are no external servers.">כל הנתונים מאוחסנים בהתקן שלך בלבד. אין שרתים חיצוניים.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showAccessibility() {
+      document.getElementById('accessibilityModal').style.display = 'block';
+    }
+    function showPrivacy() {
+      document.getElementById('privacyModal').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
