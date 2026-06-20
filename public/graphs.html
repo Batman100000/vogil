@@ -316,10 +316,10 @@
     new Chart(document.getElementById('chart2'), {
       type: 'bar',
       data: {
-        labels: ['תל אביב', 'ירושלים', 'חיפה', 'בנט', 'רמת גן', 'ראש העין', 'באר שבע'],
+        labels: ['תל אביב', 'ירושלים', 'חיפה', 'בתר יהודה', 'רמת גן', 'ראש העין', 'באר שבע', 'נתניה', 'כפר סבא', 'אשדוד', 'אשקלון', 'בית שמש'],
         datasets: [{
           label: 'מחיר דירה ממוצע (₪ מיליון)',
-          data: [2.8, 2.1, 1.4, 1.9, 2.3, 1.85, 1.2],
+          data: [2.8, 2.1, 1.4, 1.75, 2.3, 1.85, 1.2, 1.52, 2.08, 1.1, 0.98, 1.35],
           backgroundColor: barColors
         }]
       },
@@ -369,19 +369,23 @@
       options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
     });
 
-    // 6. Air Quality - PIE
+    // 6. Air Quality - BAR (Changed from pie to bar)
     new Chart(document.getElementById('chart6'), {
-      type: 'doughnut',
+      type: 'bar',
       data: {
-        labels: ['תל אביב', 'ירושלים', 'חיפה', 'באר שבע', 'אחר'],
+        labels: ['ראש העין', 'חיפה', 'תל אביב', 'ירושלים', 'באר שבע', 'רמת גן', 'בתר יהודה', 'נתניה', 'כפר סבא', 'אשדוד', 'אשקלון', 'בית שמש'],
         datasets: [{
-          data: [28, 22, 18, 15, 17],
-          backgroundColor: pieColors,
-          borderColor: '#fff',
-          borderWidth: 2
+          label: 'רמת זיהום PM2.5 (μg/m³)',
+          data: [87, 72, 58, 62, 45, 52, 68, 54, 52, 48, 50, 55],
+          backgroundColor: 'rgba(250, 112, 157, 0.8)'
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true } }
+      }
     });
 
     // 7. Crime by Type - BAR
