@@ -83,6 +83,24 @@
       gap: 10px;
     }
 
+    header .refresh-data-btn {
+      transition: all 0.3s;
+    }
+
+    header .refresh-data-btn:hover {
+      background: #f0f0f0 !important;
+      transform: scale(1.05);
+    }
+
+    header .refresh-data-btn.loading {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
     header h1 {
       font-size: 2em;
       margin-bottom: 10px;
@@ -391,6 +409,7 @@
           <option value="ashdod">אשדוד</option>
           <option value="ashkelon">אשקלון</option>
         </select>
+        <button id="refreshDataBtn" class="refresh-data-btn" onclick="refreshDataByCity()" title="רענן נתונים עבור העיר" style="display: none; padding: 6px 12px; margin-right: 10px; border-radius: 6px; border: none; background: white; color: #333; font-weight: 600; cursor: pointer;">🔄</button>
       </div>
       <div class="header-title-section">
         <h1 data-he="🏠 דאשבורד" data-en="🏠 Dashboard">🏠 דאשבורד</h1>
