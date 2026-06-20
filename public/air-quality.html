@@ -280,6 +280,9 @@
     // Update when city changes
     window.addEventListener('cityChanged', updateAirQualityTitles);
 
+    // Update when data is refreshed via refresh button
+    window.addEventListener('refreshData', updateAirQualityTitles);
+
     // Also listen for header city selector changes
     document.addEventListener('DOMContentLoaded', () => {
       const headerCitySelector = document.getElementById('headerCitySelector');
