@@ -229,13 +229,30 @@
   <script>
     function updateAirQualityTitles() {
       const selectedCity = getSelectedCity();
-      const cityData = selectedCity ? getCityData(selectedCity) : null;
-      const cityName = cityData ? cityData.name : 'ראש העין';
+      const cityData = selectedCity ? getCityData(selectedCity) : getCityData('tel-aviv');
+      const cityName = cityData ? cityData.name : 'תל אביב';
+      const airQuality = cityData?.airQuality || { pm25: 58, pm10: 95, badDays: 82, riskLevel: 35 };
 
       // Update header
       const headerP = document.querySelector('header p');
       if (headerP) {
         headerP.textContent = `השוואה מפורטת של זיהום אוויר ב${cityName} לעומת ערים בישראל`;
+      }
+
+      // Update stat boxes
+      const statBadDays = document.getElementById('stat-badDays');
+      if (statBadDays) statBadDays.textContent = `${airQuality.badDays} ימים`;
+
+      const statPm25 = document.getElementById('stat-pm25');
+      if (statPm25) statPm25.textContent = `${airQuality.pm25} μg/m³`;
+
+      const statPm10 = document.getElementById('stat-pm10');
+      if (statPm10) statPm10.textContent = `${airQuality.pm10} μg/m³`;
+
+      const statRiskLevel = document.getElementById('stat-riskLevel');
+      if (statRiskLevel) {
+        const riskPercent = Math.round((airQuality.riskLevel / 100) * airQuality.badDays);
+        statRiskLevel.textContent = `${airQuality.riskLevel}% גרוע`;
       }
 
       // Update chart titles
@@ -291,19 +308,19 @@
 
     <div class="stats-grid">
       <div class="stat-box">
-        <div class="number">156 ימים</div>
+        <div class="number" id="stat-badDays">156 ימים</div>
         <div class="label">איכות אוויר גרועה בשנה</div>
       </div>
       <div class="stat-box">
-        <div class="number">87 μg/m³</div>
+        <div class="number" id="stat-pm25">87 μg/m³</div>
         <div class="label">PM2.5 ממוצע שנתי</div>
       </div>
       <div class="stat-box">
-        <div class="number">142 μg/m³</div>
+        <div class="number" id="stat-pm10">142 μg/m³</div>
         <div class="label">PM10 ממוצע שנתי</div>
       </div>
       <div class="stat-box">
-        <div class="number">43% גרוע</div>
+        <div class="number" id="stat-riskLevel">43% גרוע</div>
         <div class="label">מעל התקן הבריאותי</div>
       </div>
     </div>
