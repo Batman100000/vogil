@@ -60,7 +60,7 @@
     header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       color: white;
       margin-bottom: 20px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -68,6 +68,7 @@
       border-radius: 12px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.2);
       gap: 20px;
+      position: relative;
     }
 
     header .header-title-section {
@@ -118,10 +119,12 @@
       font-size: 0.75em;
       opacity: 0.95;
       margin-bottom: 0;
-      margin-right: 8px;
-      white-space: nowrap;
-      display: inline;
+      margin-top: 8px;
+      margin-right: 20px;
+      white-space: normal;
+      display: block;
       line-height: 1.2;
+      text-align: center;
     }
 
     .nav-buttons {
@@ -390,22 +393,6 @@
 
   <div class="container">
     <header>
-      <div class="header-city-section">
-        <label for="headerCitySelector" style="margin: 0; font-weight: 600; white-space: nowrap;">בחר עיר:</label>
-        <select id="headerCitySelector" style="padding: 6px 10px; border-radius: 6px; border: none; background: white; color: #333; font-weight: 600;">
-          <option value="">-- בחר --</option>
-          <option value="tel-aviv">תל אביב</option>
-          <option value="jerusalem">ירושלים</option>
-          <option value="haifa">חיפה</option>
-          <option value="beersheba">באר שבע</option>
-          <option value="rishon-lezion">ראש העין</option>
-          <option value="ramat-gan">רמת גן</option>
-          <option value="netanya">נתניה</option>
-          <option value="kfar-saba">כפר סבא</option>
-          <option value="ashdod">אשדוד</option>
-          <option value="ashkelon">אשקלון</option>
-        </select>
-      </div>
       <div class="header-title-section">
         <h1 data-he="🏠 דאשבורד" data-en="🏠 Dashboard">🏠 דאשבורד</h1>
         <p data-he="פורטל מידע ממשלתי לישראל - מחפש ולומד בזמן אמת" data-en="Israel Government Data Portal - Real-time Explorer">פורטל מידע ממשלתי לישראל - מחפש ולומד בזמן אמת</p>
