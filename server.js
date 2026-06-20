@@ -135,16 +135,27 @@ app.get('/api/health', (req, res) => {
 });
 
 // SPA fallback - serve corresponding HTML files for navigation paths
-app.get('/:page', (req, res) => {
-  const { page } = req.params;
-  const htmlFile = path.join(__dirname, 'public', `${page}.html`);
+app.use((req, res, next) => {
+  // Skip API routes
+  if (req.path.startsWith('/api/')) {
+    return next();
+  }
 
-  res.sendFile(htmlFile, (err) => {
-    if (err) {
-      // If file doesn't exist, serve index.html (SPA fallback)
-      res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  // Try to serve the requested file if it exists
+  const filePath = path.join(__dirname, 'public', req.path.replace(/\/$/, '') + '.html');
+
+  try {
+    if (require('fs').existsSync(filePath)) {
+      return res.sendFile(filePath);
     }
-  });
+  } catch (e) {}
+
+  // Otherwise fall back to index.html for SPA routing
+  if (req.path !== '/' && !req.path.includes('.')) {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  } else {
+    next();
+  }
 });
 
 // Start server
